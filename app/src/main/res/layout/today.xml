@@ -1,0 +1,97 @@
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <TextView
+        android:fontFamily="@font/bmx"
+        android:text="오늘은 평균보다 더 많은 칼로리를 섭취하고 있습니다."
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:fontFamily="@font/bmx"
+            android:id="@+id/textDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingLeft="15dp"
+            android:text="TODAY"
+            android:textColor="#000000"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:fontFamily="@font/bmx"
+                android:id="@+id/editHealthDateValue1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:text="2560 "
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <TextView
+                android:fontFamily="@font/bmx"
+                android:id="@+id/maxKcal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="/ 2750"
+
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/chart"
+        android:layout_marginHorizontal="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        app:layout_constraintVertical_chainStyle="spread"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
+    <ListView
+        android:layout_marginTop="15dp"
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"></ListView>
+
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,44 @@
+type Todo @model {
+  id: ID!
+  name: String!
+  description: String
+}
+
+type Account @model{
+id: ID!
+name : String
+sex:String
+age:Int
+height: Int
+weight: Int
+momentum: Int
+select : Int
+selvalue : Int
+cal : Int
+car : Int
+pro : Int
+fat : Int
+token:String
+
+}
+
+type Date @model
+{
+
+	id : ID!
+	date : [String]!
+
+}
+
+type Food @model{
+
+name:ID!
+subname:String
+cal : Int
+car : Int
+pro : Int
+fat : Int
+
+
+
+}

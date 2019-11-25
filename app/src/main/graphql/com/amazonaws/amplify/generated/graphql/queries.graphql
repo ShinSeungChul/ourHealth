@@ -1,0 +1,111 @@
+# this is an auto generated file. This will be overwritten
+query GetTodo($id: ID!) {
+  getTodo(id: $id) {
+    id
+    name
+    description
+  }
+}
+query ListTodos(
+  $filter: ModelTodoFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listTodos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      description
+    }
+    nextToken
+  }
+}
+query GetAccount($id: ID!) {
+  getAccount(id: $id) {
+    id
+    name
+    sex
+    age
+    height
+    weight
+    momentum
+    select
+    selvalue
+    cal
+    car
+    pro
+    fat
+    token
+  }
+}
+query ListAccounts(
+  $filter: ModelAccountFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAccounts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      sex
+      age
+      height
+      weight
+      momentum
+      select
+      selvalue
+      cal
+      car
+      pro
+      fat
+      token
+    }
+    nextToken
+  }
+}
+query GetDate($id: ID!) {
+  getDate(id: $id) {
+    id
+    date
+  }
+}
+query ListDates(
+  $filter: ModelDateFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listDates(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      date
+    }
+    nextToken
+  }
+}
+query GetFood($id: ID!) {
+  getFood(id: $id) {
+    name
+    subname
+    cal
+    car
+    pro
+    fat
+  }
+}
+query ListFoods(
+  $filter: ModelFoodFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listFoods(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      name
+      subname
+      cal
+      car
+      pro
+      fat
+    }
+    nextToken
+  }
+}

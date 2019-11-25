@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/account_Select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintLeft_toRightOf="@id/textView7"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/account_Momentum" />
+    <TextView
+        android:text="Select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView7"
+        app:layout_constraintBaseline_toBaselineOf="@+id/account_Select"
+        app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toLeftOf="@+id/account_Select"/>
+    <TextView
+        android:text="활동량"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView6"
+        app:layout_constraintBaseline_toBaselineOf="@+id/account_Momentum"
+        app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toLeftOf="@+id/account_Momentum"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/account_Momentum"
+        app:layout_constraintBottom_toTopOf="@+id/account_Select"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/textView6"/>
+
+    <EditText
+        android:id="@+id/account_Weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/textView8"
+        app:layout_constraintLeft_toRightOf="@id/textView5"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/account_Height" />
+    <TextView
+        android:text="Weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        app:layout_constraintBaseline_toBaselineOf="@+id/account_Weight"
+        app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toLeftOf="@id/account_Weight"/>
+
+    <EditText
+        android:id="@+id/account_Height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/account_Weight"
+        app:layout_constraintLeft_toRightOf="@id/textView4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/account_ID" />
+    <TextView
+        android:text="Height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        app:layout_constraintBaseline_toBaselineOf="@+id/account_Height"
+        app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toLeftOf="@id/account_Height"/>
+    <TextView
+        android:text="ID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        app:layout_constraintBaseline_toBaselineOf="@+id/account_ID" app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/account_ID"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/account_ID"
+        app:layout_constraintLeft_toRightOf="@id/textView2" app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        app:layout_constraintBottom_toTopOf="@id/account_Height"/>
+    <RadioGroup
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/radioGroup" app:layout_constraintBottom_toTopOf="@id/account_ID">
+        <RadioButton
+            android:text="다이어트"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/radioButton" android:layout_weight="1"/>
+        <RadioButton
+            android:text="웨이트"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/radioButton2" android:layout_weight="1"/>
+    </RadioGroup>
+    <Button
+        android:text="가입"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button2"
+        app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toBottomOf="@id/account_Select"/>
+    <TextView
+        android:text="1:매우정적 2:정적 3:보통 4:활동적 5:매우활동적"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:id="@+id/textView8" app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" app:layout_constraintBottom_toTopOf="@id/account_Momentum"
+        app:layout_constraintTop_toBottomOf="@id/account_Weight"/>
+</android.support.constraint.ConstraintLayout>

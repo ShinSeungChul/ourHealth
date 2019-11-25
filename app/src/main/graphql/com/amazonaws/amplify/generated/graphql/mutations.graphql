@@ -1,0 +1,124 @@
+# this is an auto generated file. This will be overwritten
+mutation CreateTodo($input: CreateTodoInput!) {
+  createTodo(input: $input) {
+    id
+    name
+    description
+  }
+}
+mutation UpdateTodo($input: UpdateTodoInput!) {
+  updateTodo(input: $input) {
+    id
+    name
+    description
+  }
+}
+mutation DeleteTodo($input: DeleteTodoInput!) {
+  deleteTodo(input: $input) {
+    id
+    name
+    description
+  }
+}
+mutation CreateAccount($input: CreateAccountInput!) {
+  createAccount(input: $input) {
+    id
+    name
+    sex
+    age
+    height
+    weight
+    momentum
+    select
+    selvalue
+    cal
+    car
+    pro
+    fat
+    token
+  }
+}
+mutation UpdateAccount($input: UpdateAccountInput!) {
+  updateAccount(input: $input) {
+    id
+    name
+    sex
+    age
+    height
+    weight
+    momentum
+    select
+    selvalue
+    cal
+    car
+    pro
+    fat
+    token
+  }
+}
+mutation DeleteAccount($input: DeleteAccountInput!) {
+  deleteAccount(input: $input) {
+    id
+    name
+    sex
+    age
+    height
+    weight
+    momentum
+    select
+    selvalue
+    cal
+    car
+    pro
+    fat
+    token
+  }
+}
+mutation CreateDate($input: CreateDateInput!) {
+  createDate(input: $input) {
+    id
+    date
+  }
+}
+mutation UpdateDate($input: UpdateDateInput!) {
+  updateDate(input: $input) {
+    id
+    date
+  }
+}
+mutation DeleteDate($input: DeleteDateInput!) {
+  deleteDate(input: $input) {
+    id
+    date
+  }
+}
+mutation CreateFood($input: CreateFoodInput!) {
+  createFood(input: $input) {
+    name
+    subname
+    cal
+    car
+    pro
+    fat
+  }
+}
+mutation UpdateFood($input: UpdateFoodInput!) {
+  updateFood(input: $input) {
+    name
+    subname
+    cal
+    car
+    pro
+    fat
+  }
+}
+mutation DeleteFood($input: DeleteFoodInput!) {
+  deleteFood(input: $input) {
+    name
+    subname
+    cal
+    car
+    pro
+    fat
+  }
+}

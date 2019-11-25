@@ -1,0 +1,19 @@
+{
+    "fourdbf": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-ourhealth-fourdbf-144354-authRole",
+            "UnauthRoleArn": "arn:aws:iam::192622046502:role/amplify-ourhealth-fourdbf-144354-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::192622046502:role/amplify-ourhealth-fourdbf-144354-authRole",
+            "Region": "ap-northeast-2",
+            "DeploymentBucketName": "amplify-ourhealth-fourdbf-144354-deployment",
+            "UnauthRoleName": "amplify-ourhealth-fourdbf-144354-unauthRole",
+            "StackName": "amplify-ourhealth-fourdbf-144354",
+            "StackId": "arn:aws:cloudformation:ap-northeast-2:192622046502:stack/amplify-ourhealth-fourdbf-144354/68a2b650-09c6-11ea-a8ed-06c2ced9dd8e"
+        },
+        "categories": {
+            "auth": {
+                "ourhealthe323b5d5": {}
+            }
+        }
+    }
+}

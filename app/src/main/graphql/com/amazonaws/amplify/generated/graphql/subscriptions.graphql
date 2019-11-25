@@ -1,0 +1,124 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateTodo {
+  onCreateTodo {
+    id
+    name
+    description
+  }
+}
+subscription OnUpdateTodo {
+  onUpdateTodo {
+    id
+    name
+    description
+  }
+}
+subscription OnDeleteTodo {
+  onDeleteTodo {
+    id
+    name
+    description
+  }
+}
+subscription OnCreateAccount {
+  onCreateAccount {
+    id
+    name
+    sex
+    age
+    height
+    weight
+    momentum
+    select
+    selvalue
+    cal
+    car
+    pro
+    fat
+    token
+  }
+}
+subscription OnUpdateAccount {
+  onUpdateAccount {
+    id
+    name
+    sex
+    age
+    height
+    weight
+    momentum
+    select
+    selvalue
+    cal
+    car
+    pro
+    fat
+    token
+  }
+}
+subscription OnDeleteAccount {
+  onDeleteAccount {
+    id
+    name
+    sex
+    age
+    height
+    weight
+    momentum
+    select
+    selvalue
+    cal
+    car
+    pro
+    fat
+    token
+  }
+}
+subscription OnCreateDate {
+  onCreateDate {
+    id
+    date
+  }
+}
+subscription OnUpdateDate {
+  onUpdateDate {
+    id
+    date
+  }
+}
+subscription OnDeleteDate {
+  onDeleteDate {
+    id
+    date
+  }
+}
+subscription OnCreateFood {
+  onCreateFood {
+    name
+    subname
+    cal
+    car
+    pro
+    fat
+  }
+}
+subscription OnUpdateFood {
+  onUpdateFood {
+    name
+    subname
+    cal
+    car
+    pro
+    fat
+  }
+}
+subscription OnDeleteFood {
+  onDeleteFood {
+    name
+    subname
+    cal
+    car
+    pro
+    fat
+  }
+}

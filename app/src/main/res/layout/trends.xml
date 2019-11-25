@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="#ffffff"
+              android:orientation="vertical">
+
+    <TextView
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/bmx"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            android:text="최근 30일"/>
+
+
+    <com.github.mikephil.charting.charts.CombinedChart
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="15dp"
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2.5" />
+
+    <TextView
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/bmx"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            android:text="동향 분석결과"/>
+
+    <ListView
+            android:layout_marginHorizontal="10dp"
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3.0"></ListView>
+
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        android:background="#ededed"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+    <ImageView
+
+            android:id="@+id/ads"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            android:background="@drawable/workout1"
+            app:layout_constraintBottom_toTopOf="@+id/today"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread"
+
+            app:layout_constraintVertical_weight="0.3" />
+
+    <RelativeLayout
+            android:id="@+id/today"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="15dp"
+            app:layout_constraintVertical_weight="0.3"
+            app:layout_constraintBottom_toTopOf="@+id/cameraLayout"
+            app:layout_constraintTop_toBottomOf="@+id/ads"
+    >
+
+        <ImageButton
+                android:id="@+id/todaybtn"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:adjustViewBounds="true"
+                android:background="@drawable/roundbtn" />
+
+        <com.example.wlgusdn.ourhealth.CircularProgressBar
+                android:id="@+id/progress"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="30dp"
+                android:layout_marginVertical="15dp"
+                app:progress="35"
+                app:progressBarThickness="8dp" />
+
+        <LinearLayout
+
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="45dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/kcaltxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+
+                    android:fontFamily="@font/bmx"
+                    android:gravity="center"
+                    android:text="2850(-350)"
+                    android:textColor="#65f052"
+                    android:textStyle="bold" />
+
+
+
+            <TextView
+                    android:id="@+id/maxtxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+
+                    android:fontFamily="@font/bmx"
+                    android:gravity="center"
+                    android:text="/2750Kcal"
+                    android:textColor="#f09e52"
+                    android:textStyle="bold" />
+
+
+
+
+        </LinearLayout>
+
+        <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/brchart"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
+
+
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="35dp"
+                android:layout_marginHorizontal="15dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/cameraLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintVertical_weight="0.2"
+            android:orientation="horizontal"
+
+            app:layout_constraintBottom_toTopOf="@+id/checkmyavg"
+            app:layout_constraintTop_toBottomOf="@+id/today"
+    >
+
+        <ImageButton
+                android:id="@+id/food"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="15dp"
+                android:layout_weight="0.5"
+
+
+                android:background="@drawable/foodbt" />
+        <ImageButton
+                android:background="@drawable/foodbt"
+                android:id="@+id/menu"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:text="메뉴"
+                android:textStyle="bold"
+                android:textSize="20sp"
+        />
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/checkmyavg"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginVertical="15dp"
+            android:background="@drawable/roundbtn"
+            android:fontFamily="@font/bmx"
+            android:text="기초대사량 측정하기"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cameraLayout"
+            app:layout_constraintVertical_weight="0.2" />
+
+    <Button
+            android:visibility="invisible"
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button3" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+</android.support.constraint.ConstraintLayout>
