@@ -41,6 +41,9 @@
         <activity android:name=".StorageActivity">
 
         </activity>
+        <activity android:name=".FoodInsert">
+
+        </activity>
         <activity android:name=".HistoryActivity"></activity>
         <activity android:name=".AuthenticationActivity">
 

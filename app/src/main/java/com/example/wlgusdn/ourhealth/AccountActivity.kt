@@ -45,6 +45,8 @@ class AccountActivity : AppCompatActivity()
     var fat : Int?=null
     var str : String?= null
 
+    var insert : Button?=null
+
     private val CreatemutateCallback  = object : GraphQLCall.Callback<CreateAccountMutation.Data>() {
 
 
@@ -92,6 +94,18 @@ class AccountActivity : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
+
+        insert = findViewById(R.id.button5)
+
+        insert!!.setOnClickListener(object: View.OnClickListener {
+            override fun onClick(v: View?) {
+
+                val intent = Intent(this@AccountActivity,FoodInsert::class.java)
+
+                startActivity(intent)
+
+            }
+        })
 
         Log.d("checkkk",AWSMobileClient.getInstance().toString())
         mAWSAppSyncClient = AWSAppSyncClient.builder()

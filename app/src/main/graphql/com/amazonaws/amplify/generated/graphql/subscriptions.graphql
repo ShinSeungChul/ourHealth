@@ -95,7 +95,7 @@ subscription OnDeleteDate {
 subscription OnCreateFood {
   onCreateFood {
     name
-    subname
+    id
     cal
     car
     pro
@@ -105,7 +105,7 @@ subscription OnCreateFood {
 subscription OnUpdateFood {
   onUpdateFood {
     name
-    subname
+    id
     cal
     car
     pro
@@ -115,7 +115,7 @@ subscription OnUpdateFood {
 subscription OnDeleteFood {
   onDeleteFood {
     name
-    subname
+    id
     cal
     car
     pro

@@ -85,7 +85,7 @@ query ListDates(
 query GetFood($id: ID!) {
   getFood(id: $id) {
     name
-    subname
+    id
     cal
     car
     pro
@@ -100,7 +100,7 @@ query ListFoods(
   listFoods(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       name
-      subname
+      id
       cal
       car
       pro
