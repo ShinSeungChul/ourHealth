@@ -38,29 +38,23 @@ class TodayFragment : Fragment()
         listview = view.findViewById(R.id.list)
 
 
-
-
-        todaydata.add(TodayKcalList("09:00","짜장면",863))
-        todaydata.add(TodayKcalList("13:00","짜장면",863))
-        todaydata.add(TodayKcalList("18:00","짜장면",863))
-        todaydata.add(TodayKcalList("19:00","짜장면",863))
-        todaydata.add(TodayKcalList("21:00","짜장면",863))
-        todaydata.add(TodayKcalList("29:00","짜장면",863))
-
-
-
+        //todaydata = singleton.GetTodayKcalList()
+        todaydata.add(TodayKcalList("09:00","짜장면",863,0,0,0))
+        todaydata.add(TodayKcalList("13:00","짜장면",863,0,0,0))
+        todaydata.add(TodayKcalList("18:00","짜장면",863,0,0,0))
+        todaydata.add(TodayKcalList("19:00","짜장면",863,0,0,0))
+        todaydata.add(TodayKcalList("21:00","짜장면",863,0,0,0))
+        todaydata.add(TodayKcalList("29:00","짜장면",863,0,0,0))
 
 
         val adapter = TodayKcalAdapter(todaydata)
         adapter.notifyDataSetChanged()
         listview.adapter = adapter
+
+
         val entries = ArrayList<BarEntry>()
 
-        /*for (data in arrayList) {
 
-            // turn your data into Entry objects
-            entries.add(Entry(data.getValueX(), data.getValueY()))
-        }*/
 
         for(x in 0..24)
         {

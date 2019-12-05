@@ -1,5 +1,6 @@
 package com.example.wlgusdn.ourhealth
 
+
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -16,12 +17,16 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.Button
+import android.widget.Toast
 import java.io.FileInputStream
+import android.R.attr.data
+import java.io.ByteArrayOutputStream
+
 
 class Popupselect : Activity()
 {
 
-    lateinit var ca:Button
+    lateinit var ca: Button
     lateinit var ga : Button
     val REQUEST_FOOD_CAPTURE = 1
     val REQUEST_FOOD_GALLERY = 2
@@ -56,8 +61,8 @@ class Popupselect : Activity()
 
 
                     val intent = Intent(Intent.ACTION_PICK);
-                    intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                    startActivityForResult(intent, REQUEST_FOOD_GALLERY);
+                    intent.setType(MediaStore.Images.Media.CONTENT_TYPE)
+                    startActivityForResult(intent, REQUEST_FOOD_GALLERY)
 
 
                 }
@@ -80,9 +85,11 @@ class Popupselect : Activity()
                 override fun onClick(v: View?) {
 
 
-                    val intent = Intent(Intent.ACTION_PICK);
+                    /*val intent = Intent(Intent.ACTION_PICK);
                     intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                    startActivityForResult(intent, REQUEST_TEXT_GALLERY);
+                    startActivityForResult(intent, REQUEST_TEXT_GALLERY);*/
+                    val intent = Intent(application.applicationContext,CaptureResult::class.java);
+                    startActivity(intent)
 
 
                 }
@@ -99,7 +106,7 @@ class Popupselect : Activity()
                 val selectedImage = data!!.getData();
                 var filePathColumn : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
                 var cursor = getContentResolver().query(selectedImage,
-                        filePathColumn, null, null, null);
+                    filePathColumn, null, null, null);
                 cursor.moveToFirst();
 
                 val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
@@ -119,25 +126,34 @@ class Popupselect : Activity()
             }
             REQUEST_FOOD_GALLERY->{
 
-                val selectedImage = data!!.getData();
-                var filePathColumn : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-                var cursor = getContentResolver().query(selectedImage,
-                        filePathColumn, null, null, null);
-                cursor.moveToFirst();
 
-                val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                val picturePath = cursor.getString(column_index);
+                val pickedImage = data!!.data
+                // Let's read picked image path using content resolver
+                val filePath = arrayOf(MediaStore.Images.Media.DATA)
+                val cursor = contentResolver.query(pickedImage, filePath, null, null, null)
+                cursor!!.moveToFirst()
+                val imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]))
+
+                val options = BitmapFactory.Options()
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                val bitmap = BitmapFactory.decodeFile(imagePath, options)
 
                 cursor.close();
                 // String picturePath contains the path of selected Image
-                photoPath = picturePath;
 
 
-                var intent : Intent = Intent()
+                /*var intent : Intent = Intent()
 
                 intent.putExtra("path",photoPath)
 
-                setResult(RESULT_OK,intent)
+                setResult(RESULT_OK,intent)*/
+                val stream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                val byteArray = stream.toByteArray()
+
+                val in1 = Intent(this, CaptureResult::class.java)
+                //in1.putExtra("image", byteArray)
+                startActivity(in1)
                 finish()
 
 
@@ -153,8 +169,8 @@ class Popupselect : Activity()
                 finish()
             }
             REQUEST_TEXT_GALLERY->{
-
-                val selectedImage = data!!.getData();
+                Toast.makeText(this,"gallery text", Toast.LENGTH_LONG).show()
+                /*val selectedImage = data!!.getData();
                 var filePathColumn : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
                 var cursor = getContentResolver().query(selectedImage,
                         filePathColumn, null, null, null);
@@ -175,16 +191,17 @@ class Popupselect : Activity()
                 intent.putExtra("path",photoPath)
 
                 setResult(RESULT_OK,intent)
-                finish()
+                finish()*/
 
             }
-            else->{Log.d("camera","request else...")}
+            else->{
+                Log.d("camera","request else...")}
 
         }
     }
 
 
-    fun getResizedBitmap( image:Bitmap,  newHeight:Int,  newWidth:Int):Bitmap {
+    fun getResizedBitmap(image: Bitmap, newHeight:Int, newWidth:Int): Bitmap {
         var width = image.width
         var height = image.height
 
@@ -199,7 +216,7 @@ class Popupselect : Activity()
         // recreate the new Bitmap
 
         var resizedBitmap = Bitmap.createBitmap(image, 1, 1, width-2, height-2,
-                matrix, false);
+            matrix, false);
         return resizedBitmap;
     }
 
@@ -208,7 +225,7 @@ class Popupselect : Activity()
         var o = BitmapFactory.Options();
         o.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(
-                this.getContentResolver().openInputStream(selectedImage), null, o);
+            this.getContentResolver().openInputStream(selectedImage), null, o);
 
         val REQUIRED_SIZE = 100;
 
@@ -229,6 +246,6 @@ class Popupselect : Activity()
         var o2 = BitmapFactory.Options();
         o2.inSampleSize = scale;
         return BitmapFactory.decodeStream(
-                this.getContentResolver().openInputStream(selectedImage), null, o2);
+            this.getContentResolver().openInputStream(selectedImage), null, o2);
     }
 }

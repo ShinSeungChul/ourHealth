@@ -44,13 +44,16 @@ class TrendFragment : Fragment()
     lateinit var chart : CombinedChart
     var trendata : ArrayList<TrendList> = ArrayList()
     val singleton : HealthData_Singleton = HealthData_Singleton.getInstance()
-
+    lateinit var day30List : Array<Day30List>
 
     var xAxes : ArrayList<String> = ArrayList()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.trends, container, false) as View
+
+        day30List = singleton.day30Lists
+
         listview = view.findViewById(R.id.list)
 
         trendata.add(TrendList("지방섭취가 평균보다 높습니다"))
@@ -67,10 +70,10 @@ class TrendFragment : Fragment()
             var data = LineData()
             var entry = ArrayList<Entry>()
 
-            for(x in 1 until 13)
+            for(x in 1 until 31)
             {
                 val randomValues =  Random.nextInt(1500, 1800)
-                entry.add(Entry(x.toFloat(),randomValues.toFloat()))
+                entry.add(Entry(x.toFloat(),day30List[x-1].getWorkoutKcal().toFloat()))
             }
             var set : LineDataSet = LineDataSet(entry,"Fat")
             set.setColor(Color.parseColor("#000000"))
@@ -84,7 +87,7 @@ class TrendFragment : Fragment()
             var data = BarData()
             var entry = ArrayList<BarEntry>()
 
-            for(x in 1 until 13)
+            for(x in 1 until 31)
             {
                 val randomValues =  Random.nextInt(2000, 3000)
                 entry.add(BarEntry(x.toFloat(),randomValues.toFloat()))
@@ -114,8 +117,8 @@ class TrendFragment : Fragment()
         xAxis.textSize = 10f
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setAxisMinValue(1f)
-        xAxis.setAxisMaxValue(12f)
-        xAxis.setLabelCount(12,true)
+        xAxis.setAxisMaxValue(30f)
+        xAxis.setLabelCount(30,true)
 
         //xAxis.granularity = 1f
         leftAxis.setAxisMinValue(0f)
@@ -129,11 +132,13 @@ class TrendFragment : Fragment()
         xAxis.setDrawGridLines(false)
 
         chart.description.isEnabled = false
+
         //chart.legend.isEnabled = false
 
 
 
         chart.data = datas
+        chart.data.isHighlightEnabled = false
         chart.invalidate()
 
 // Create an ArrayAdapter using the string array and a default spinner layout
@@ -145,27 +150,6 @@ class TrendFragment : Fragment()
         return view
     }
 
-
-    /*inner class CustomBar(chart: BarDataProvider?, animator: ChartAnimator?, viewPortHandler: ViewPortHandler?) : BarChartRenderer(chart, animator, viewPortHandler)
-    {
-        override fun drawDataSet(c: Canvas, dataSet: IBarDataSet, index: Int) {
-            val trans = mChart.getTransformer(dataSet.axisDependency)
-
-            val phaseX = mAnimator.phaseX
-            val phaseY = mAnimator.phaseY
-
-             var buffer = mBarBuffers[index]
-            buffer.setPhases(phaseX, phaseY)
-            buffer.setDataSet(index)
-            buffer.setInverted(mChart.isInverted(dataSet.axisDependency))
-            //....
-            c.drawRoundRect(
-                    buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
-                    buffer.buffer[j + 3], cornersDimen, cornersDimen, mRenderPaint
-            )
-            //....
-        }
-    }*/
-
-
 }
+
+

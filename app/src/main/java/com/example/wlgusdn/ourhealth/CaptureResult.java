@@ -1,5 +1,6 @@
 package com.example.wlgusdn.ourhealth;
 
+
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -17,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,9 +61,11 @@ public class CaptureResult extends AppCompatActivity {
     private Account mAccount;
     private ProgressDialog mProgressDialog;
 
+    private List<String> menu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_capture_result);
 
         mProgressDialog = new ProgressDialog(this);
@@ -70,7 +74,11 @@ public class CaptureResult extends AppCompatActivity {
         selectedImage = findViewById(R.id.selected_image);
         labelResults = findViewById(R.id.tv_label_results);
         textResults = findViewById(R.id.tv_texts_results);
+        //launchImagePicker();
 
+        ActivityCompat.requestPermissions(CaptureResult.this,
+                new String[]{Manifest.permission.GET_ACCOUNTS},
+                REQUEST_PERMISSIONS);
         selectImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,6 +213,22 @@ public class CaptureResult extends AppCompatActivity {
             protected void onPostExecute(BatchAnnotateImagesResponse response) {
                 mProgressDialog.dismiss();
                 textResults.setText(getDetectedTexts(response));
+                Log.d("capture",getDetectedTexts(response).toString()+"    text is string?");
+                String[] words = getDetectedTexts(response).split("\\n+");
+                for (int i = 0; i < words.length; i++) {
+                    //all of list of detected text... -> split by line .... -> if list include exception text? ->
+                    words[i] = words[i].replaceAll("[^\\w]", "");
+                    if(words[i].contains("null") || words[i].contains("0"))//exception text : price, 원산지, title(가게이름 , 음식종류 , ...)
+                    {
+
+                    }
+                    else
+                    {
+                        Log.d("list",words[i]+"   replace..");
+                    }
+
+
+                }
                 labelResults.setText(getDetectedLabels(response));
             }
 

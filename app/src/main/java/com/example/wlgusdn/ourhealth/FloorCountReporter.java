@@ -33,22 +33,22 @@ import com.samsung.android.sdk.healthdata.HealthResultHolder;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class StepCountReporter {
+public class FloorCountReporter {
     private final HealthDataStore mStore;
-    private StepCountObserver mStepCountObserver;
+    private FloorCountObserver mFloorCountObserver;
     private static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000L;
     private int daycount = 0;
     HealthData_Singleton singleton = HealthData_Singleton.getInstance();
-    public StepCountReporter(HealthDataStore store) {
-        mStore = store;
 
+    public FloorCountReporter(HealthDataStore store) {
+        mStore = store;
 
     }
 
-    public void start(StepCountObserver listener,int day) {
-        mStepCountObserver = listener;
+    public void start(FloorCountObserver listener,int day) {
+        mFloorCountObserver = listener;
         // Register an observer to listen changes of step count and get today step count
-        HealthDataObserver.addObserver(mStore, HealthConstants.StepCount.HEALTH_DATA_TYPE, mObserver);
+        HealthDataObserver.addObserver(mStore, HealthConstants.FloorsClimbed.HEALTH_DATA_TYPE, mObserver);
         daycount = day;
         readTodayStepCount();
     }
@@ -61,10 +61,10 @@ public class StepCountReporter {
         long startTime = getStartTimeOfToday() - daycount*ONE_DAY_IN_MILLIS;
         long endTime = startTime + ONE_DAY_IN_MILLIS;
 
-        HealthDataResolver.ReadRequest request = new ReadRequest.Builder()
-                .setDataType(HealthConstants.StepCount.HEALTH_DATA_TYPE)
-                .setProperties(new String[] {HealthConstants.StepCount.CALORIE})
-                .setLocalTimeRange(HealthConstants.StepCount.START_TIME, HealthConstants.StepCount.TIME_OFFSET,
+        ReadRequest request = new ReadRequest.Builder()
+                .setDataType(HealthConstants.FloorsClimbed.HEALTH_DATA_TYPE)
+                .setProperties(new String[] {HealthConstants.FloorsClimbed.FLOOR})
+                .setLocalTimeRange(HealthConstants.FloorsClimbed.START_TIME, HealthConstants.FloorsClimbed.TIME_OFFSET,
                         startTime, endTime)
                 .build();
 
@@ -88,22 +88,22 @@ public class StepCountReporter {
     }
 
     private final HealthResultHolder.ResultListener<ReadResult> mListener = result -> {
-        float count = 0;
+        int count = 0;
 
         try {
             for (HealthData data : result) {
-                count += data.getInt(HealthConstants.StepCount.CALORIE);
+                count += (data.getInt(HealthConstants.FloorsClimbed.FLOOR)*7);
 
             }
 
         } finally {
-            Log.d("reporter",count+" count>"+daycount+" step");
-            singleton.SetWorkout_data(0,(int)count);
+            Log.d("reporter",count+" count>"+daycount+" floor");
+            singleton.SetWorkout_data(1,count);
             result.close();
         }
 
-        if (mStepCountObserver != null) {
-            mStepCountObserver.onChanged((int)count);
+        if (mFloorCountObserver != null) {
+            mFloorCountObserver.onChanged(count);
         }
     };
 
@@ -117,7 +117,7 @@ public class StepCountReporter {
         }
     };
 
-    public interface StepCountObserver {
+    public interface FloorCountObserver {
         void onChanged(int count);
     }
 }

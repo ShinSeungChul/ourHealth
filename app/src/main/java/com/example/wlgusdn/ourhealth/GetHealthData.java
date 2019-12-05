@@ -1,14 +1,9 @@
 package com.example.wlgusdn.ourhealth;
 
-import com.example.wlgusdn.ourhealth.AuthenticationActivity;
-import com.example.wlgusdn.ourhealth.HealthData_Singleton;
-import com.example.wlgusdn.ourhealth.R;
-import com.example.wlgusdn.ourhealth.StepCountReporter;
-import com.samsung.android.sdk.healthdata.HealthConnectionErrorResult;
-import com.samsung.android.sdk.healthdata.HealthConstants;
-import com.samsung.android.sdk.healthdata.HealthDataService;
-import com.samsung.android.sdk.healthdata.HealthDataStore;
-import com.samsung.android.sdk.healthdata.HealthPermissionManager;
+import android.os.Debug;
+import android.os.Handler;
+import android.widget.Toast;
+import com.samsung.android.sdk.healthdata.*;
 import com.samsung.android.sdk.healthdata.HealthPermissionManager.PermissionKey;
 import com.samsung.android.sdk.healthdata.HealthPermissionManager.PermissionType;
 
@@ -18,33 +13,49 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 public class GetHealthData extends Activity {
 
     public static final String APP_TAG = "SimpleHealth";
     HealthData_Singleton singleton = HealthData_Singleton.getInstance();
-
-
+    public boolean one = false;
+    public boolean two = false;
+    public boolean three = false;
+    public long start = 0;
+    public long end = 0;
+    public float exkcal = 0f;
+    private static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000L;
+    int semp = 0;
     private HealthDataStore mStore;
-    private StepCountReporter mReporter;
-
+    private StepCountReporter mReporter_step;
+    private FloorCountReporter mReporter_floor;
+    private ExerciseReporter mReporter_exercise;
+    private HealthDataResolver resolver;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-
+        setContentView(R.layout.loading);
         // Create a HealthDataStore instance and set its listener
         mStore = new HealthDataStore(this, mConnectionListener);
         // Request the connection to the health data store
-        mStore.connectService();
+        resolver = new HealthDataResolver(mStore,null);
+
+        // = getStartTimeOfToday(0);
+        //end = start + ONE_DAY_IN_MILLIS;
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                mStore.connectService();
+            }
+        }, 2000);
     }
 
     @Override
@@ -58,11 +69,54 @@ public class GetHealthData extends Activity {
         @Override
         public void onConnected() {
             Log.d(APP_TAG, "Health data service is connected.");
-            mReporter = new StepCountReporter(mStore);
-            if (isPermissionAcquired()) {
-                mReporter.start(mStepCountObserver);
-            } else {
-                requestPermission();
+            mReporter_step = new StepCountReporter(mStore);
+            mReporter_floor = new FloorCountReporter(mStore);
+            mReporter_exercise = new ExerciseReporter(mStore);
+
+            if (isPermissionAcquired()) {//승인된 상태면 바로 걸음 수를 계산
+
+                //start = getStartTimeOfToday(i*ONE_DAY_IN_MILLIS);
+
+                for(int i = 0 ; i<30 ; i++)//당일부터 29일 전까지 총 30일 간의 기록 0- 29
+                {
+                    Log.d(APP_TAG,i+" count start");
+                    mReporter_step.start(mStepCountObserver,i);
+                    mReporter_floor.start(mFloorCountObserver,i);
+                    mReporter_exercise.start(mExerciseObserver,i);
+                    Log.d(APP_TAG,i+" count end");
+
+                }
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after 5s = 5000ms
+                        singleton.Set30Workout();
+                        Intent i = new Intent(getApplication(),AuthenticationActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(i);
+                    }
+
+                }, 3000);
+
+                /*;*/
+
+
+            } else {//승인이 없으면 requestpermission
+                if(!one)
+                {
+                    requestPermission(new PermissionKey(HealthConstants.StepCount.HEALTH_DATA_TYPE, PermissionType.READ),1);
+                }
+                if(!two)
+                {
+                    requestPermission(new PermissionKey(HealthConstants.Exercise.HEALTH_DATA_TYPE, PermissionType.READ),2);
+                }
+                if(!three)
+                {
+                    requestPermission(new PermissionKey(HealthConstants.FloorsClimbed.HEALTH_DATA_TYPE, PermissionType.READ),3);
+                }
+
             }
         }
 
@@ -137,19 +191,39 @@ public class GetHealthData extends Activity {
 
     private boolean isPermissionAcquired() {
         PermissionKey permKey = new PermissionKey(HealthConstants.StepCount.HEALTH_DATA_TYPE, PermissionType.READ);
+        PermissionKey permKey_exercise =  new PermissionKey(HealthConstants.Exercise.HEALTH_DATA_TYPE, PermissionType.READ);
+        PermissionKey permKey_floor =  new PermissionKey(HealthConstants.FloorsClimbed.HEALTH_DATA_TYPE, PermissionType.READ);
+
+        PermissionKey keys[] = {permKey,permKey_exercise,permKey_floor};
         HealthPermissionManager pmsManager = new HealthPermissionManager(mStore);
         try {
             // Check whether the permissions that this application needs are acquired
             Map<PermissionKey, Boolean> resultMap = pmsManager.isPermissionAcquired(Collections.singleton(permKey));
-            return resultMap.get(permKey);
+            Map<PermissionKey, Boolean> resultMap2 = pmsManager.isPermissionAcquired(Collections.singleton(permKey_exercise));
+            Map<PermissionKey, Boolean> resultMap3 = pmsManager.isPermissionAcquired(Collections.singleton(permKey_floor));
+            one = resultMap.get(permKey);
+            two = resultMap2.get(permKey_exercise);
+            three = resultMap3.get(permKey_floor);
+
+            if(one && two && three)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         } catch (Exception e) {
             Log.e(APP_TAG, "Permission request fails.", e);
         }
         return false;
     }
 
-    private void requestPermission() {
-        PermissionKey permKey = new PermissionKey(HealthConstants.StepCount.HEALTH_DATA_TYPE, PermissionType.READ);
+    private void requestPermission(PermissionKey key,Integer num) {
+        PermissionKey permKey = key;
+
+
         HealthPermissionManager pmsManager = new HealthPermissionManager(mStore);
         try {
             // Show user permission UI for allowing user to change options
@@ -163,7 +237,22 @@ public class GetHealthData extends Activity {
                             showPermissionAlarmDialog();
                         } else {
                             // Get the current step count and display it
-                            mReporter.start(mStepCountObserver);
+                            switch (num)
+                            {
+                                case 1:
+                                    mReporter_step.start(mStepCountObserver,0);
+                                    break;
+                                case 2:
+                                    String cal = HealthConstants.Exercise.CALORIE;
+                                    Toast.makeText(this,cal,Toast.LENGTH_LONG).show();
+                                    break;
+                                case 3:
+                                    String floor = HealthConstants.FloorsClimbed.FLOOR;
+                                    Toast.makeText(this,floor,Toast.LENGTH_LONG).show();
+                                    break;
+
+                            }
+
                         }
                     });
         } catch (Exception e) {
@@ -171,7 +260,17 @@ public class GetHealthData extends Activity {
         }
     }
 
+
     private StepCountReporter.StepCountObserver mStepCountObserver = count -> {
+        Log.d(APP_TAG, "Step reported : " + count);
+        updateStepCountView(String.valueOf(count));
+    };
+
+    private FloorCountReporter.FloorCountObserver mFloorCountObserver = count -> {
+        Log.d(APP_TAG, "Step reported : " + count);
+        updateStepCountView(String.valueOf(count));
+    };
+    private ExerciseReporter.ExerciseObserver mExerciseObserver = count -> {
         Log.d(APP_TAG, "Step reported : " + count);
         updateStepCountView(String.valueOf(count));
     };
@@ -179,8 +278,7 @@ public class GetHealthData extends Activity {
     private void updateStepCountView(final String count) {
 
         runOnUiThread(() -> singleton.SetData(count));
-        Intent i = new Intent(this,AuthenticationActivity.class);
-        startActivity(i);
+
 
     }
 
@@ -195,11 +293,105 @@ public class GetHealthData extends Activity {
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
 
         if (item.getItemId() == R.id.connect) {
-            requestPermission();
+            requestPermission(new PermissionKey(HealthConstants.StepCount.HEALTH_DATA_TYPE, PermissionType.READ),1);
+            requestPermission(new PermissionKey(HealthConstants.Exercise.HEALTH_DATA_TYPE, PermissionType.READ),2);
+            requestPermission(new PermissionKey(HealthConstants.FloorsClimbed.HEALTH_DATA_TYPE, PermissionType.READ),3);
+
         }
 
         return true;
     }
+
+    private final HealthResultHolder.ResultListener<HealthDataResolver.ReadResult> mRdResult =
+            new HealthResultHolder.ResultListener<HealthDataResolver.ReadResult>() {
+
+                @Override
+                public void onResult(HealthDataResolver.ReadResult result) {
+
+                    try {
+                        Iterator<HealthData> iterator = result.iterator();
+
+                        if (iterator.hasNext()) {
+
+                            HealthData data = iterator.next();
+                            exkcal += data.getFloat(HealthConstants.Exercise.CALORIE);
+                            Log.d(APP_TAG,"next iterator" + exkcal + "in exercise...");
+                        }
+                    } finally {
+                        Log.d(APP_TAG,"close iterator");
+                        result.close();
+                    }
+                }
+            };
+
+    private final HealthResultHolder.ResultListener<HealthDataResolver.ReadResult> mRdResult_step =
+            new HealthResultHolder.ResultListener<HealthDataResolver.ReadResult>() {
+
+                @Override
+                public void onResult(HealthDataResolver.ReadResult result) {
+
+                    try {
+                        Iterator<HealthData> iterator = result.iterator();
+
+                        if (iterator.hasNext()) {
+
+                            HealthData data = iterator.next();
+                            exkcal += data.getFloat(HealthConstants.StepCount.CALORIE);
+                            Log.d(APP_TAG,exkcal + "in stepcount...");
+
+                        }
+                    } finally {
+                        //Log.d(APP_TAG,"close iterator");
+                        result.close();
+                    }
+                }
+            };
+
+    private long getStartTimeOfToday(long day) {
+        Calendar today = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+        Log.d(APP_TAG,today.toString()+"        123123");
+        return (today.getTimeInMillis()-day);
+    }
+    private long getStartTimeOfToday() {
+        Calendar today = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+
+        return today.getTimeInMillis();
+    }
+
+    private final HealthResultHolder.ResultListener<HealthDataResolver.ReadResult> mRdResult_floor =
+            new HealthResultHolder.ResultListener<HealthDataResolver.ReadResult>() {
+
+                @Override
+                public void onResult(HealthDataResolver.ReadResult result) {
+
+                    try {
+                        Iterator<HealthData> iterator = result.iterator();
+
+                        if (iterator.hasNext()) {
+
+                            HealthData data = iterator.next();
+                            exkcal += data.getFloat(HealthConstants.FloorsClimbed.FLOOR)*7;
+                            Log.d(APP_TAG,"next iterator" + exkcal + "in floor...");
+
+                        }
+                    } finally {
+                        Log.d(APP_TAG,"close iterator");
+                        result.close();
+                    }
+                }
+            };
+
+
 
 
 }
