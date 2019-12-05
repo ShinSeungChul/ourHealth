@@ -6,25 +6,18 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.*
-import com.amazonaws.Response
 import com.amazonaws.amplify.generated.graphql.CreateAccountMutation
 import com.amazonaws.amplify.generated.graphql.GetAccountQuery
-import com.amazonaws.amplify.generated.graphql.ListAccountsQuery
 import com.amazonaws.amplify.generated.graphql.UpdateAccountMutation
-import com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiThread
 import com.amazonaws.mobile.client.AWSMobileClient
 import com.amazonaws.mobile.config.AWSConfiguration
 import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient
 import com.amazonaws.mobileconnectors.appsync.sigv4.CognitoUserPoolsAuthProvider
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility
-import com.amazonaws.services.s3.AmazonS3Client
 import com.apollographql.apollo.GraphQLCall
-import com.apollographql.apollo.api.Query
 import com.apollographql.apollo.exception.ApolloException
-import com.example.wlgusdn.ourhealth.MainActivity
 import type.CreateAccountInput
 import java.lang.Exception
-import javax.annotation.Nonnull
 
 class AccountActivity : AppCompatActivity()
 {
@@ -32,8 +25,8 @@ class AccountActivity : AppCompatActivity()
     var et_height : EditText? = null
     var et_weight : EditText? = null
     var et_momentum : EditText? = null
-    var et_select : EditText? = null
-    var select : Int = 0
+    var et_age : EditText? = null
+    var sex : String? = null
     var ra1 : RadioButton?=null
     var ra2 : RadioButton?=null
     var tv : TextView? = null
@@ -127,7 +120,8 @@ class AccountActivity : AppCompatActivity()
 
 
     if(AWSMobileClient.getInstance().identityId!=null) {
-        mAWSAppSyncClient!!.query(GetAccountQuery.builder().id(AWSMobileClient.getInstance().identityId).build())
+
+        mAWSAppSyncClient!!.query(GetAccountQuery.builder().id(AWSMobileClient.getInstance().identityId/*"멸치국수"*/).build())
             .enqueue(object : com.apollographql.apollo.GraphQLCall.Callback<GetAccountQuery.Data>() {
                 override fun onResponse(response: com.apollographql.apollo.api.Response<GetAccountQuery.Data>) {
 
@@ -135,7 +129,8 @@ class AccountActivity : AppCompatActivity()
                     runOnUiThread(
                         {
                             Log.d("checkkk",response.data()!!.account.toString())
-                            if (response.data()!!.account != null) {
+                            if (response.data()!!.account != null)
+                            {
                                 Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
                                 val intent = Intent(this@AccountActivity, MainActivity::class.java)
                                 startActivity(intent)
@@ -155,6 +150,7 @@ class AccountActivity : AppCompatActivity()
             }
             )
 
+
     }
 
 
@@ -162,7 +158,7 @@ class AccountActivity : AppCompatActivity()
         et_height = findViewById(R.id.account_Height)
         et_weight = findViewById(R.id.account_Weight)
         et_momentum = findViewById(R.id.account_Momentum)
-        et_select = findViewById(R.id.account_Select)
+        et_age = findViewById(R.id.account_Age)
         ra1 = findViewById(R.id.radioButton)
         ra2 = findViewById(R.id.radioButton2)
         tv = findViewById(R.id.textView7)
@@ -175,15 +171,13 @@ class AccountActivity : AppCompatActivity()
                 if(ra1!!.isSelected)
                 {
                     //다이어트
-                    select=1
-                    tv!!.text="목표 체중"
-                    et_select!!.hint = "1달 후 달성하고 싶은 체중"
+                    sex="woman"
+
                 }
                 else
                 {
-                    select=2
-                    tv!!.text="운동 강도"
-                    et_select!!.hint = "1:매우약함 2:약함 3:보통 4:강함 5:매우강함"
+                    sex="man"
+
                 }
 
             }
@@ -194,16 +188,12 @@ class AccountActivity : AppCompatActivity()
 
                 if(ra2!!.isSelected)
                 {
-                    select=2
-                    tv!!.text="운동 강도"
-                    et_select!!.hint = "1:매우약함 2:약함 3:보통 4:강함 5:매우강함"
+                    sex="man"
 
                 }
                 else
                 {
-                    select=1
-                    tv!!.text="목표 체중"
-                    et_select!!.hint = "1달 후 달성하고 싶은 체중"
+                    sex="woman"
 
                 }
 
@@ -213,30 +203,37 @@ class AccountActivity : AppCompatActivity()
         bu!!.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View?) {
 
-                when(et_momentum!!.text.toString().toInt())
+
+
+
+                if(sex=="man")
                 {
-                    1->{mo=20}
-                    2->{mo=25}
-                    3->{mo=30}
-                    4->{mo=35}
-                    5->{mo=40}
+                    var bmr = (66.47 +(13.75*et_weight!!.text.toString().toInt()) + (5 * et_height!!.text.toString().toInt()) - (6.76 * et_age!!.text.toString().toInt())).toFloat()
+                    Toast.makeText(this@AccountActivity,et_height!!.text.toString()+"  "+et_age!!.text.toString()+"  "+et_weight!!.text.toString()+"  "+et_momentum!!.text.toString(),Toast.LENGTH_LONG).show()
+                    Log.d("checkkk",bmr.toString())
+                    when(et_momentum!!.text.toString().toInt())
+                    {
+
+                        1->{cal = (bmr*1.4).toInt() }
+                        2->{cal = (bmr*1.7).toInt()}
+                        3->{cal = (bmr*1.9).toInt()}
+
+                    }
+                    Log.d("checkkk",cal.toString())
                 }
 
-                cal = (((et_height!!.text.toString().toInt()-100)*(0.9))*mo!!).toInt()
-
-                if(select==1)
-                    pro = (et_weight!!.text.toString().toInt()*1.0).toInt()
                 else
                 {
-                    when(et_select!!.text.toString().toInt())
+                    var bmr = (655.1 +(9.56*et_weight!!.text.toString().toInt()) + (1.85 * et_height!!.text.toString().toInt()) - (4.68 * et_age!!.text.toString().toInt())).toFloat()
+                    when(et_momentum!!.text.toString().toInt())
                     {
-                        1->{pro = (et_weight!!.text.toString().toInt()*1.0).toInt()}
-                        2->{pro = (et_weight!!.text.toString().toInt()*1.3).toInt()}
-                        3->{pro = (et_weight!!.text.toString().toInt()*1.5).toInt()}
-                        4->{pro = (et_weight!!.text.toString().toInt()*1.8).toInt()}
-                        5->{pro = (et_weight!!.text.toString().toInt()*2.0).toInt()}
+                        1->{cal = (bmr*1.4).toInt() }
+                        2->{cal = (bmr*1.6).toInt()}
+                        3->{cal = (bmr*1.8).toInt()}
                     }
                 }
+
+                pro = (et_weight!!.text.toString().toInt()*1.0).toInt()
 
                 fat = (cal!!.toDouble()/90).toInt()
 
@@ -260,6 +257,7 @@ class AccountActivity : AppCompatActivity()
         val weight = et_weight!!.text.toString()
         val height = et_height!!.text.toString()
         val momentum = et_momentum!!.text.toString()
+        val age = et_age!!.text.toString()
 
 
         val input = CreateAccountInput.builder()
@@ -268,8 +266,7 @@ class AccountActivity : AppCompatActivity()
                 .height(height.toInt())
                 .weight(weight.toInt())
                 .momentum(momentum.toInt())
-                .select(select)
-                .selvalue(et_select!!.text.toString().toInt())
+                .age(age.toInt())
                 .cal(cal)
                 .car(car)
                 .pro(pro)

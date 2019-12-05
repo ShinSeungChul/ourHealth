@@ -162,8 +162,8 @@ class BMR_Popup : Activity() {
             when(active)
             {
                 1->{recommended_kcal = bmr*1.4 }
-                2->{recommended_kcal = bmr*1.6}
-                3->{recommended_kcal = bmr*1.8}
+                2->{recommended_kcal = bmr*1.7}
+                3->{recommended_kcal = bmr*1.9}
             }
 
         }
@@ -173,8 +173,8 @@ class BMR_Popup : Activity() {
             when(active)
             {
                 1->{recommended_kcal = bmr*1.4 }
-                2->{recommended_kcal = bmr*1.7}
-                3->{recommended_kcal = bmr*1.9}
+                2->{recommended_kcal = bmr*1.6}
+                3->{recommended_kcal = bmr*1.8}
             }
         }
 

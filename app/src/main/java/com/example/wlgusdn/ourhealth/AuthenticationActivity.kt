@@ -20,6 +20,7 @@ class AuthenticationActivity : AppCompatActivity() {
         AWSMobileClient.getInstance().initialize(applicationContext, object : Callback<UserStateDetails> {
 
             override fun onResult(userStateDetails: UserStateDetails) {
+
                 Log.i(TAG, userStateDetails.userState.toString())
                 when (userStateDetails.userState) {
                     UserState.SIGNED_IN -> {

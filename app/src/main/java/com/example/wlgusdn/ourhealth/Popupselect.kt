@@ -127,33 +127,25 @@ class Popupselect : Activity()
             REQUEST_FOOD_GALLERY->{
 
 
-                val pickedImage = data!!.data
-                // Let's read picked image path using content resolver
-                val filePath = arrayOf(MediaStore.Images.Media.DATA)
-                val cursor = contentResolver.query(pickedImage, filePath, null, null, null)
-                cursor!!.moveToFirst()
-                val imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]))
+                val selectedImage = data!!.getData();
+                var filePathColumn : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+                var cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+                cursor.moveToFirst();
 
-                val options = BitmapFactory.Options()
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                val bitmap = BitmapFactory.decodeFile(imagePath, options)
+                val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                val picturePath = cursor.getString(column_index);
 
                 cursor.close();
                 // String picturePath contains the path of selected Image
+                photoPath = picturePath;
 
 
-                /*var intent : Intent = Intent()
+                var intent : Intent = Intent()
 
                 intent.putExtra("path",photoPath)
 
-                setResult(RESULT_OK,intent)*/
-                val stream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-                val byteArray = stream.toByteArray()
-
-                val in1 = Intent(this, CaptureResult::class.java)
-                //in1.putExtra("image", byteArray)
-                startActivity(in1)
+                setResult(RESULT_OK,intent)
                 finish()
 
 
