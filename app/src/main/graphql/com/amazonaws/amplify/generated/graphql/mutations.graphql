@@ -77,48 +77,78 @@ mutation DeleteAccount($input: DeleteAccountInput!) {
 mutation CreateDate($input: CreateDateInput!) {
   createDate(input: $input) {
     id
-    date
+    date {
+      id
+      time
+      food
+      kcal
+      pro
+      car
+      fat
+    }
   }
 }
 mutation UpdateDate($input: UpdateDateInput!) {
   updateDate(input: $input) {
     id
-    date
+    date {
+      id
+      time
+      food
+      kcal
+      pro
+      car
+      fat
+    }
   }
 }
 mutation DeleteDate($input: DeleteDateInput!) {
   deleteDate(input: $input) {
     id
-    date
+    date {
+      id
+      time
+      food
+      kcal
+      pro
+      car
+      fat
+    }
   }
 }
 mutation CreateFood($input: CreateFoodInput!) {
   createFood(input: $input) {
-    name
     id
-    cal
-    car
-    pro
-    fat
+    food {
+      id
+      cal
+      car
+      pro
+      fat
+    }
   }
 }
 mutation UpdateFood($input: UpdateFoodInput!) {
   updateFood(input: $input) {
-    name
     id
-    cal
-    car
-    pro
-    fat
+    food {
+      id
+      cal
+      car
+      pro
+      fat
+    }
   }
 }
 mutation DeleteFood($input: DeleteFoodInput!) {
   deleteFood(input: $input) {
-    name
     id
-    cal
-    car
-    pro
-    fat
+    food {
+      id
+      cal
+      car
+      pro
+      fat
+    }
   }
 }

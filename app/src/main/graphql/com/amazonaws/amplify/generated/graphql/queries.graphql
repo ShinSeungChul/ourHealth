@@ -66,7 +66,15 @@ query ListAccounts(
 query GetDate($id: ID!) {
   getDate(id: $id) {
     id
-    date
+    date {
+      id
+      time
+      food
+      kcal
+      pro
+      car
+      fat
+    }
   }
 }
 query ListDates(
@@ -77,19 +85,29 @@ query ListDates(
   listDates(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      date
+      date {
+        id
+        time
+        food
+        kcal
+        pro
+        car
+        fat
+      }
     }
     nextToken
   }
 }
 query GetFood($id: ID!) {
   getFood(id: $id) {
-    name
     id
-    cal
-    car
-    pro
-    fat
+    food {
+      id
+      cal
+      car
+      pro
+      fat
+    }
   }
 }
 query ListFoods(
@@ -99,12 +117,14 @@ query ListFoods(
 ) {
   listFoods(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
-      name
       id
-      cal
-      car
-      pro
-      fat
+      food {
+        id
+        cal
+        car
+        pro
+        fat
+      }
     }
     nextToken
   }

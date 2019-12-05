@@ -22,22 +22,39 @@ token:String
 
 }
 
+type Day
+{
+	id : ID!
+	time : String
+	food : String
+	kcal : Int
+	pro : Int
+	car : Int
+	fat : Int
+}
+
+type FoodData
+{
+id : ID!
+cal : Int
+car : Int
+pro : Int
+fat : Int
+}
+
 type Date @model
 {
 
 	id : ID!
-	date : [String]!
+	date : [Day]!
 
 }
 
 type Food @model{
 
-name:ID!
-subname:String
-cal : Int
-car : Int
-pro : Int
-fat : Int
+id:ID!
+food:[FoodData]!
+
 
 
 

@@ -77,48 +77,78 @@ subscription OnDeleteAccount {
 subscription OnCreateDate {
   onCreateDate {
     id
-    date
+    date {
+      id
+      time
+      food
+      kcal
+      pro
+      car
+      fat
+    }
   }
 }
 subscription OnUpdateDate {
   onUpdateDate {
     id
-    date
+    date {
+      id
+      time
+      food
+      kcal
+      pro
+      car
+      fat
+    }
   }
 }
 subscription OnDeleteDate {
   onDeleteDate {
     id
-    date
+    date {
+      id
+      time
+      food
+      kcal
+      pro
+      car
+      fat
+    }
   }
 }
 subscription OnCreateFood {
   onCreateFood {
-    name
     id
-    cal
-    car
-    pro
-    fat
+    food {
+      id
+      cal
+      car
+      pro
+      fat
+    }
   }
 }
 subscription OnUpdateFood {
   onUpdateFood {
-    name
     id
-    cal
-    car
-    pro
-    fat
+    food {
+      id
+      cal
+      car
+      pro
+      fat
+    }
   }
 }
 subscription OnDeleteFood {
   onDeleteFood {
-    name
     id
-    cal
-    car
-    pro
-    fat
+    food {
+      id
+      cal
+      car
+      pro
+      fat
+    }
   }
 }

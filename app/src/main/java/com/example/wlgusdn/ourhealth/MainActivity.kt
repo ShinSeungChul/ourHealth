@@ -25,6 +25,7 @@ import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.PutObjectRequest
 import com.apollographql.apollo.GraphQLCall
+import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.exception.ApolloException
 import com.example.wlgusdn.ourhealth.CircularProgressBar
 import com.example.wlgusdn.ourhealth.HistoryActivity
@@ -38,9 +39,7 @@ import com.google.api.client.json.Json
 import com.google.api.client.json.JsonParser
 import com.google.gson.JsonObject
 import org.json.JSONObject
-import type.CreateAccountInput
-import type.CreateDateInput
-import type.UpdateDateInput
+import type.*
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
@@ -49,8 +48,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.random.Random
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity()
+{
     val url = " https://1228u0kujc.execute-api.ap-northeast-2.amazonaws.com/post/hello"
 
     lateinit var imageView : ImageView
@@ -65,15 +64,17 @@ class MainActivity : AppCompatActivity() {
     val REQUEST_TEXT_CAPTURE = 3
     val REQUEST_TEXT_GALLERY = 4
     var i=1
+    var strr : String? = null
     private val REQUEST_PERMISSION = 101
     lateinit var mykcal : TextView
     lateinit var dailyKcal : TextView
-    var bu : Button?=null
+    var Datesave : Button?=null
+    var Foodsearch : Button?=null
     var photoPath : String?=null;
     val singleton : HealthData_Singleton = HealthData_Singleton.getInstance()
     var s3 : AmazonS3Client?= null
     var transferUtility : TransferUtility?=null
-    var list : ArrayList<String>?= ArrayList<String>()
+    var list : ArrayList<DayInput>?= ArrayList<DayInput>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -120,63 +121,73 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        bu = findViewById(R.id.button3)
+        Datesave = findViewById(R.id.button3)
+        Foodsearch = findViewById(R.id.button6)
 
+        Foodsearch!!.setOnClickListener(object: View.OnClickListener {//음식사진에 대한 데이터 찾기
+            override fun onClick(v: View?) {
+                Thread(object : Runnable {
+                    override fun run() {
+                        try {
 
-        Thread(object : Runnable {
-            override fun run() {
-                try {
+                            // FMC 메시지 생성 start
 
-                    // FMC 메시지 생성 start
-
-                    val notification = JSONObject()
-                    notification.put("key1", "wlgusdnzzz")
-
-
-
-
-                    val Url = URL(url)
-                    val conn = Url.openConnection() as HttpURLConnection
-                    var sb = StringBuilder()
-                    conn.requestMethod = "POST"
-                    conn.doOutput = true
-                    conn.doInput = true
-
-
-                    conn.setRequestProperty("Accept", "application/json")
-                    conn.setRequestProperty("Content-type", "application/json")
-                    val os = conn.outputStream
-                    os.write(notification.toString().toByteArray(charset("utf-8")))
-                    os.flush()
-
-
-                    var br =  BufferedReader( InputStreamReader(conn.getInputStream()))
-
-
-                  for(line in br.readLine())
-                  {
-                      sb.append(line)
-                  }
-                    var JsonParser = com.google.gson.JsonParser()
-                    var jObject =JsonParser.parse(sb.toString().trim()) as JsonObject
-
-                    br.close()
-                    conn.disconnect()
-
-                    Log.d("checkkkk",jObject.get("body").toString())
-                    Log.d("checkkkk",jObject.getAsJsonObject("db").toString())
-                    //{"statusCode": 200, "body": "\"wlgusdnzzz\""}
+                            val notification = JSONObject()
+                            notification.put("key1", "wlgusdnzzz")
+                            notification.put("food",strr)
 
 
 
 
+                            val Url = URL(url)
+                            val conn = Url.openConnection() as HttpURLConnection
+                            var sb = StringBuilder()
+                            conn.requestMethod = "POST"
+                            conn.doOutput = true
+                            conn.doInput = true
 
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+
+                            conn.setRequestProperty("Accept", "application/json")
+                            conn.setRequestProperty("Content-type", "application/json")
+                            val os = conn.outputStream
+                            os.write(notification.toString().toByteArray(charset("utf-8")))
+                            os.flush()
+
+
+                            var br =  BufferedReader( InputStreamReader(conn.getInputStream()))
+
+
+                            for(line in br.readLine())
+                            {
+                                sb.append(line)
+                            }
+                            var JsonParser = com.google.gson.JsonParser()
+                            var jObject =JsonParser.parse(sb.toString().trim()) as JsonObject
+
+                            br.close()
+                            conn.disconnect()
+
+                            Log.d("asdasd",jObject.get("foodname").toString())
+                            //{"statusCode": 200, "body": "\"wlgusdnzzz\""}
+
+                            val intent = Intent(this@MainActivity,FoodPopup::class.java)
+                            intent.putExtra("food",jObject.get("foodname").toString())
+                            startActivity(intent)
+
+
+
+
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+
+                    }
+                }).start()
+
 
             }
-        }).start()
+        })
+
 
 
         imageView = findViewById(R.id.ads)
@@ -199,7 +210,7 @@ class MainActivity : AppCompatActivity() {
 
 
         }
-        bu!!.setOnClickListener(object: View.OnClickListener {
+        Datesave!!.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View?) {
 
 
@@ -215,8 +226,24 @@ class MainActivity : AppCompatActivity() {
 
                                 if(response.data()?.date?.date()==null)
                                 {
+                                    val time :String = "01/01/01"
+                                    val food :String = "김치찌개"
+                                    val kcal :Int = 250
+                                    val pro :Int = 15
+                                    val car :Int = 12
+                                    val fat :Int= 15
 
-                                    list!!.add(i.toString())
+                                    val dd = DayInput.builder()
+                                        .id(AWSMobileClient.getInstance().identityId)
+                                        .time(time)
+                                        .food(food)
+                                        .kcal(kcal)
+                                        .pro(pro)
+                                        .car(car)
+                                        .fat(fat)
+                                        .build()
+
+                                    list!!.add(dd)
 
                                     val input = CreateDateInput.builder()
                                         .id(AWSMobileClient.getInstance().identityId)
@@ -236,18 +263,50 @@ class MainActivity : AppCompatActivity() {
                                 else
                                 {
 
+                                    val time :String = "01/01/01"
+                                    val food :String = "김치찌개"
+                                    val kcal :Int = 250
+                                    val pro :Int = 15
+                                    val car :Int = 12
+                                    val fat :Int= 15
+
+
 
                                     var listt = response.data()!!.date!!.date()
                                     Log.d("wlgusdn111",listt.toString())
 
+
+
+
                                     listt=ArrayList(listt)
 
-                                    listt.add("wlgusdn")
 
+
+                                    listt.add(GetDateQuery.Date(listt[0].__typename(),AWSMobileClient.getInstance().identityId,time,food,kcal,pro,car,fat))
+
+
+                                    val llist : ArrayList<DayInput> = ArrayList<DayInput>()
+                                    for(data in listt)
+                                    {
+
+                                        val dd = DayInput.builder()
+                                            .id(AWSMobileClient.getInstance().identityId)
+                                            .time(data.time())
+                                            .food(data.food())
+                                            .kcal(data.kcal())
+                                            .pro(data.pro())
+                                            .car(data.car())
+                                            .fat(data.fat())
+                                            .build()
+
+                                        llist!!.add(
+                                           dd
+                                        )
+                                    }
 
                                     val input = UpdateDateInput.builder()
                                         .id(AWSMobileClient.getInstance().identityId)
-                                        .date(listt)
+                                        .date(llist)
                                         .build()
 
                                     i++
@@ -319,7 +378,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        val credentialsProvider = BasicAWSCredentials("AKIAY5AEBCGRHQUJZBHV","nz53HjJTufXuxJO9YITl6/pe4c4mdTVwc91W0kbE")
+        val credentialsProvider = BasicAWSCredentials("AKIASZWJLFUTLG3KSE4T","TdSE5o42See3cTE/m7OU2HS2kkp62mNrrNL0P4MK")
 
         /*CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
     getApplicationContext(),
@@ -389,7 +448,7 @@ class MainActivity : AppCompatActivity() {
     }
     fun saves3(str : String)
     {
-        var strr : String? = null
+
         val arrstr = str.split("/")
         for(i in 0..arrstr.size-1)
         {
