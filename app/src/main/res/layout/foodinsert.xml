@@ -27,13 +27,13 @@ android:orientation="vertical">
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/et_pro"/>
+            android:id="@+id/et_car"/>
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/et_car"/>
+            android:id="@+id/et_pro"/>
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

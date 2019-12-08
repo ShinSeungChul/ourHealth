@@ -20,6 +20,7 @@ import android.widget.Button
 import android.widget.Toast
 import java.io.FileInputStream
 import android.R.attr.data
+import android.view.MotionEvent
 import java.io.ByteArrayOutputStream
 
 
@@ -35,6 +36,19 @@ class Popupselect : Activity()
     private val REQUEST_PERMISSION = 101
 
     var photoPath : String?=null;
+
+    override fun onDestroy() {
+        super.onDestroy()
+        finish()
+    }
+    public override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if(event!!.action == MotionEvent.ACTION_OUTSIDE){return false}
+        return true;
+    }
+    public override fun onBackPressed() {
+        return;
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -105,8 +119,7 @@ class Popupselect : Activity()
                 Log.d("camera","request food capture...")
                 val selectedImage = data!!.getData();
                 var filePathColumn : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-                var cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
+                var cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
                 cursor.moveToFirst();
 
                 val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)

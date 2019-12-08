@@ -121,72 +121,8 @@ class MainActivity : AppCompatActivity()
             }
         }
 
-        Datesave = findViewById(R.id.button3)
         Foodsearch = findViewById(R.id.button6)
 
-        Foodsearch!!.setOnClickListener(object: View.OnClickListener {//음식사진에 대한 데이터 찾기
-            override fun onClick(v: View?) {
-                Thread(object : Runnable {
-                    override fun run() {
-                        try {
-
-                            // FMC 메시지 생성 start
-
-                            val notification = JSONObject()
-                            notification.put("key1", "wlgusdnzzz")
-                            notification.put("food",strr)
-
-
-
-
-                            val Url = URL(url)
-                            val conn = Url.openConnection() as HttpURLConnection
-                            var sb = StringBuilder()
-                            conn.requestMethod = "POST"
-                            conn.doOutput = true
-                            conn.doInput = true
-
-
-                            conn.setRequestProperty("Accept", "application/json")
-                            conn.setRequestProperty("Content-type", "application/json")
-                            val os = conn.outputStream
-                            os.write(notification.toString().toByteArray(charset("utf-8")))
-                            os.flush()
-
-
-                            var br =  BufferedReader( InputStreamReader(conn.getInputStream()))
-
-
-                            for(line in br.readLine())
-                            {
-                                sb.append(line)
-                            }
-                            var JsonParser = com.google.gson.JsonParser()
-                            var jObject =JsonParser.parse(sb.toString().trim()) as JsonObject
-
-                            br.close()
-                            conn.disconnect()
-
-                            Log.d("asdasd",jObject.get("foodname").toString())
-                            //{"statusCode": 200, "body": "\"wlgusdnzzz\""}
-
-                            val intent = Intent(this@MainActivity,FoodPopup::class.java)
-                            intent.putExtra("food",jObject.get("foodname").toString())
-                            startActivity(intent)
-
-
-
-
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-
-                    }
-                }).start()
-
-
-            }
-        })
 
 
 
@@ -196,7 +132,6 @@ class MainActivity : AppCompatActivity()
         menuBtn = findViewById(R.id.menu)
         checkmyBtn = findViewById(R.id.checkmyavg)
         progress = findViewById(R.id.progress)
-        saveBtn = findViewById(R.id.button4)
         dailyKcal = findViewById(R.id.maxtxt)
         mykcal = findViewById(R.id.kcaltxt)
         setProgressText()
@@ -210,139 +145,7 @@ class MainActivity : AppCompatActivity()
 
 
         }
-        Datesave!!.setOnClickListener(object: View.OnClickListener {
-            override fun onClick(v: View?) {
 
-
-                AccountActivity.mAWSAppSyncClient!!.query(GetDateQuery.builder().id(AWSMobileClient.getInstance().identityId).build())
-                    .enqueue(object : com.apollographql.apollo.GraphQLCall.Callback<GetDateQuery.Data>() {
-                        override fun onResponse(response: com.apollographql.apollo.api.Response<GetDateQuery.Data>) {
-
-
-
-
-                            runOnUiThread {
-
-
-                                if(response.data()?.date?.date()==null)
-                                {
-                                    val time :String = "01/01/01"
-                                    val food :String = "김치찌개"
-                                    val kcal :Int = 250
-                                    val pro :Int = 15
-                                    val car :Int = 12
-                                    val fat :Int= 15
-
-                                    val dd = DayInput.builder()
-                                        .id(AWSMobileClient.getInstance().identityId)
-                                        .time(time)
-                                        .food(food)
-                                        .kcal(kcal)
-                                        .pro(pro)
-                                        .car(car)
-                                        .fat(fat)
-                                        .build()
-
-                                    list!!.add(dd)
-
-                                    val input = CreateDateInput.builder()
-                                        .id(AWSMobileClient.getInstance().identityId)
-                                        .date(list!!)
-                                        .build()
-
-                                    i++
-
-                                    val addBodyMutation = CreateDateMutation.builder()
-                                        .input(input)
-                                        .build()
-
-                                    AccountActivity.mAWSAppSyncClient!!.mutate(addBodyMutation).enqueue(CreatemutateCallback)
-
-                                }
-
-                                else
-                                {
-
-                                    val time :String = "01/01/01"
-                                    val food :String = "김치찌개"
-                                    val kcal :Int = 250
-                                    val pro :Int = 15
-                                    val car :Int = 12
-                                    val fat :Int= 15
-
-
-
-                                    var listt = response.data()!!.date!!.date()
-                                    Log.d("wlgusdn111",listt.toString())
-
-
-
-
-                                    listt=ArrayList(listt)
-
-
-
-                                    listt.add(GetDateQuery.Date(listt[0].__typename(),AWSMobileClient.getInstance().identityId,time,food,kcal,pro,car,fat))
-
-
-                                    val llist : ArrayList<DayInput> = ArrayList<DayInput>()
-                                    for(data in listt)
-                                    {
-
-                                        val dd = DayInput.builder()
-                                            .id(AWSMobileClient.getInstance().identityId)
-                                            .time(data.time())
-                                            .food(data.food())
-                                            .kcal(data.kcal())
-                                            .pro(data.pro())
-                                            .car(data.car())
-                                            .fat(data.fat())
-                                            .build()
-
-                                        llist!!.add(
-                                           dd
-                                        )
-                                    }
-
-                                    val input = UpdateDateInput.builder()
-                                        .id(AWSMobileClient.getInstance().identityId)
-                                        .date(llist)
-                                        .build()
-
-                                    i++
-
-                                    val addBodyMutation = UpdateDateMutation.builder()
-                                        .input(input)
-                                        .build()
-
-                                    AccountActivity.mAWSAppSyncClient!!.mutate(addBodyMutation).enqueue(UpdatemutateCallback)
-
-
-                                }
-
-
-
-
-                            }
-
-                        }
-
-                        override fun onFailure(e: ApolloException) {
-
-                            Log.d("searchget", "Fail")
-                        }
-
-
-                    }
-                    )
-
-
-
-
-
-
-            }
-        })
 
         val set = BarDataSet(entries, "BarDataSet")
         set.setColor(Color.parseColor("#FF8EFF7F"))
@@ -435,39 +238,90 @@ class MainActivity : AppCompatActivity()
 
 
 
-        saveBtn!!.setOnClickListener(object: View.OnClickListener {
-            override fun onClick(v: View?) {
 
-                saves3(photoPath!!)
-
-            }
-        })
 
 
 
     }
     fun saves3(str : String)
     {
+        Thread(object : Runnable {
+            override fun run() {
+                try {
 
-        val arrstr = str.split("/")
-        for(i in 0..arrstr.size-1)
-        {
-            if(i==arrstr.size-1)
-            {
-                strr = arrstr[i]
+
+                    val arrstr = str.split("/")
+                    for(i in 0..arrstr.size-1)
+                    {
+                        if(i==arrstr.size-1)
+                        {
+                            strr = arrstr[i]
+                        }
+                    }
+                    Log.d("asdasd",str)
+
+
+
+
+                    val observer = transferUtility!!.upload(
+
+                        "sagemaker-forourhealth",     /* 업로드 할 버킷 이름 */
+                        strr,    /* 버킷에 저장할 파일의 이름 */
+                        File(str)/* 버킷에 저장할 파일  */
+                    )
+
+
+                    val notification = JSONObject()
+                    notification.put("key1", "wlgusdnzzz")
+                    notification.put("food",strr)
+
+
+
+
+                    val Url = URL(url)
+                    val conn = Url.openConnection() as HttpURLConnection
+                    var sb = StringBuilder()
+                    conn.requestMethod = "POST"
+                    conn.doOutput = true
+                    conn.doInput = true
+
+
+                    conn.setRequestProperty("Accept", "application/json")
+                    conn.setRequestProperty("Content-type", "application/json")
+                    val os = conn.outputStream
+                    os.write(notification.toString().toByteArray(charset("utf-8")))
+                    os.flush()
+
+
+                    var br =  BufferedReader( InputStreamReader(conn.getInputStream()))
+
+
+                    for(line in br.readLine())
+                    {
+                        sb.append(line)
+                    }
+                    var JsonParser = com.google.gson.JsonParser()
+                    var jObject =JsonParser.parse(sb.toString().trim()) as JsonObject
+
+                    br.close()
+                    conn.disconnect()
+
+                    Log.d("asdasd",jObject.get("foodname").toString())
+                    //{"statusCode": 200, "body": "\"wlgusdnzzz\""}
+
+                    val intent = Intent(this@MainActivity,FoodPopup::class.java)
+                    intent.putExtra("food",jObject.get("foodname").toString())
+                    startActivity(intent)
+
+
+
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
             }
-        }
-        Log.d("asdasd",str)
-
-
-
-
-        val observer = transferUtility!!.upload(
-
-                "sagemaker-forourhealth",     /* 업로드 할 버킷 이름 */
-                strr,    /* 버킷에 저장할 파일의 이름 */
-                File(str)/* 버킷에 저장할 파일  */
-        )
+        }).start()
 
 
     }
@@ -490,6 +344,8 @@ class MainActivity : AppCompatActivity()
 
 
                 imageView.setImageBitmap(bm)
+
+                saves3(photoPath!!)
             }
             2->{
                photoPath= data!!.getStringExtra("path")
@@ -500,7 +356,14 @@ class MainActivity : AppCompatActivity()
 
 
                 imageView.setImageBitmap(bm)
+
+                saves3(photoPath!!)
+
+
+
+
             }
+
         }
     }
 

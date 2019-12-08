@@ -26,10 +26,7 @@ class FoodListActivity : AppCompatActivity
     var data : ArrayList<FoodDataInput> = ArrayList<FoodDataInput>()
     var daydata : ArrayList<DayInput> = ArrayList<DayInput>()
 
-    constructor(data : ArrayList<FoodDataInput>)
-    {
-        this.data=data
-    }
+
     constructor()
 
     private val CreatemutateCallback  = object : GraphQLCall.Callback<CreateDateMutation.Data>() {
@@ -83,29 +80,32 @@ class FoodListActivity : AppCompatActivity
         setContentView(R.layout.activity_selectfood)
 
         list = findViewById(R.id.select_list)
-        Log.d("asdasd",llist!!.size.toString())
+        Log.d("asdasdd",FoodPopup.llist!!.size.toString())
 
 
-        var adap = FoodListAdapter(llist!!)
+        var adap = FoodListAdapter(FoodPopup.llist!!)
         adap.notifyDataSetChanged()
-        Log.d("asdasd","11")
+        Log.d("asdasdd","11")
         list!!.adapter=adap
         adap.notifyDataSetChanged()
-        Log.d("asdasd","22")
+        Log.d("asdasdd","22")
         setListViewHeightBasedOnChildren(list!!)
 
 
         list!!.setOnItemClickListener(object: AdapterView.OnItemClickListener {
             override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long)
             {
+                val now = System.currentTimeMillis()
 
-                val today = Date()
+
+
+                val today = Date(now)
                 var strdate: String? = null
 
                 var format1: SimpleDateFormat? = null
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 {
-                    format1 = SimpleDateFormat("yyyy/MM/dd")
+                    format1 = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
 
                     strdate = format1.format(today)
 
@@ -128,11 +128,11 @@ class FoodListActivity : AppCompatActivity
 
 
 
-                                    val day_name = data[position].id()
-                                    val day_kcal = data[position].cal()
-                                    val day_pro = data[position].pro()
-                                    val day_car = data[position].car()
-                                    val day_fat = data[position].fat()
+                                    val day_name = llist!![position].id()
+                                    val day_kcal = llist!![position].cal()
+                                    val day_pro = llist!![position].pro()
+                                    val day_car = llist!![position].car()
+                                    val day_fat =llist!![position].fat()
 
 
                                     //클릭한 음식의 데이터를 받아와 DayInput으로 만들고 Date에 넣는다
@@ -168,11 +168,11 @@ class FoodListActivity : AppCompatActivity
                                 else
                                 {
 
-                                    val day_name = data[position].id()
-                                    val day_kcal = data[position].cal()
-                                    val day_pro = data[position].pro()
-                                    val day_car = data[position].car()
-                                    val day_fat = data[position].fat()
+                                    val day_name = llist!![position].id()
+                                    val day_kcal = llist!![position].cal()
+                                    val day_pro = llist!![position].pro()
+                                    val day_car = llist!![position].car()
+                                    val day_fat = llist!![position].fat()
 
 
 
