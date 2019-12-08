@@ -37,7 +37,7 @@ class AccountActivity : AppCompatActivity()
     var pro : Int?=null
     var fat : Int?=null
     var str : String?= null
-
+    val singleton : HealthData_Singleton = HealthData_Singleton.getInstance()
     var insert : Button?=null
 
     private val CreatemutateCallback  = object : GraphQLCall.Callback<CreateAccountMutation.Data>() {
@@ -117,6 +117,8 @@ class AccountActivity : AppCompatActivity()
                     }
                 }).build()
 
+        singleton.mClient = mAWSAppSyncClient;
+
 
 
     if(AWSMobileClient.getInstance().identityId!=null) {
@@ -126,18 +128,32 @@ class AccountActivity : AppCompatActivity()
                 override fun onResponse(response: com.apollographql.apollo.api.Response<GetAccountQuery.Data>) {
 
 
-                    runOnUiThread(
-                        {
-                            Log.d("checkkk",response.data()!!.account.toString())
-                            if (response.data()!!.account != null)
-                            {
-                                Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
-                                val intent = Intent(this@AccountActivity, MainActivity::class.java)
-                                startActivity(intent)
-                            }
+                    runOnUiThread {
+                        Log.d("checkkk",response.data()!!.account.toString())
+                        if (response.data()!!.account != null) {
+                            singleton.clientData.kcal = response.data()!!.account!!.cal()
+                            singleton.clientData.id = response.data()!!.account!!.id()
+                            singleton.clientData.name = response.data()!!.account!!.name()
+                            singleton.clientData.height = response.data()!!.account!!.height()
+                            singleton.clientData.weight = response.data()!!.account!!.weight()
+                            singleton.clientData.car = response.data()!!.account!!.car()
+                            singleton.clientData.pro = response.data()!!.account!!.pro()
+                            singleton.clientData.fat = response.data()!!.account!!.fat()
 
+                            Log.d("checkkk", "singleton user     "+singleton.clientData.id)
+
+                            //Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
+                            //Log.d("checkkk", "찾음"+response.data()!!.account!!.cal().toString())
+                            // Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
+                            //  Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
+                            Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
+
+
+                            val intent = Intent(this@AccountActivity, MainActivity::class.java)
+                            startActivity(intent)
                         }
-                    )
+
+                    }
 
                 }
 

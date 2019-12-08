@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class GetHealthData extends Activity {
@@ -96,6 +98,32 @@ public class GetHealthData extends Activity {
                         Intent i = new Intent(getApplication(),AuthenticationActivity.class);
                         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(i);
+
+
+                        //날짜 차이 구하기 샘플(나중에 디비에 사용할 코드)
+
+                        try {
+                            String date1 = "2019/12/05 17:37:30";
+                            String date2 = "2019/10/05 08:37:30";
+                            //String current = Calendar.getInstance(Locale.KOREA).getTime().toString();
+                            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd ");
+                            Date firstdate = format.parse(date1);
+                            Date seconddate = format.parse(date2);
+                            //Date currenttime = format.parse(current);
+                            //Toast.makeText(getApplicationContext(),current,Toast.LENGTH_LONG).show();
+                            Date currentTime = Calendar.getInstance().getTime();
+                            String date_text = new SimpleDateFormat("yyyy/MM/dd ", Locale.KOREA).format(currentTime);
+                            currentTime = format.parse(date_text);
+
+                            long calDate = firstdate.getTime() - seconddate.getTime();
+                            long calDateday = calDate / (24*60*60*1000);
+                            calDateday = Math.abs(calDateday);
+                            Log.d("tag",currentTime+ "     \n"+calDateday+"days");
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            Log.d("error",e.toString()+"    error....");
+                        }
+
                     }
 
                 }, 3000);

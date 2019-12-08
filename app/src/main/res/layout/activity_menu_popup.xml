@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="#ffffff"
+              android:orientation="vertical"
+              android:layout_width="300dp"
+
+              android:layout_height="wrap_content">
+
+    <TextView
+            android:id="@+id/menuname"
+            android:fontFamily="@font/bmx"
+            android:textColor="#000000"
+            android:text="메뉴이름"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+    />
+
+    <TextView
+            android:id="@+id/kcal"
+            android:fontFamily="@font/bmx"
+            android:textColor="#000000"
+            android:text="555 kcal"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+    />
+
+    <TextView
+        android:id="@+id/car"
+        android:fontFamily="@font/bmx"
+        android:textColor="#000000"
+        android:text="탄수화물 : 46 g"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+/>
+
+
+    <TextView
+            android:id="@+id/pro"
+            android:fontFamily="@font/bmx"
+            android:textColor="#000000"
+            android:text="단백질 : 12 g"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+    />
+
+    <TextView
+            android:id="@+id/fat"
+            android:fontFamily="@font/bmx"
+            android:textColor="#000000"
+            android:text="지방 : 20 g"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+    />
+
+
+
+</LinearLayout>

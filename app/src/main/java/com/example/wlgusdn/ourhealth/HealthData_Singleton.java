@@ -1,6 +1,7 @@
 package com.example.wlgusdn.ourhealth;
 
 import android.util.Log;
+import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
 import com.example.wlgusdn.ourhealth.Day30List;
 import com.example.wlgusdn.health.TodayWorkoutList;
 import com.github.mikephil.charting.data.BarEntry;
@@ -24,9 +25,18 @@ public class HealthData_Singleton {
     private int steplist[] = new int[30];//for day30list
     private int floorlist[] = new int[30];//for day30list
     private int exerciselist[] = new int[30];//for day30list
+
+    public AWSAppSyncClient mClient;
+    public ClientData clientData;
+
+
     public static HealthData_Singleton getInstance() {
         Log.d("tag", "get instance");
         return ourInstance;
+    }
+    public void SetClient(AWSAppSyncClient client)
+    {
+        mClient = client;
     }
 
     public void TimeToHour(String time,String kcal)
@@ -147,6 +157,7 @@ public class HealthData_Singleton {
     private HealthData_Singleton() {
 
         day30Lists = new Day30List[30];
+        clientData = new ClientData("","",0,0,0,0,0,0,0);
         for(int i = 0 ; i < 30 ; i++)
         {
             day30Lists[i] = new Day30List();
@@ -155,6 +166,10 @@ public class HealthData_Singleton {
             steplist[i] = -1;
 
         }
+
+    }
+    public void GetAWSDB()
+    {
 
     }
 }

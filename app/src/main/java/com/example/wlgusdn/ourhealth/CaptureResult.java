@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -19,11 +20,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
+import com.amazonaws.amplify.generated.graphql.GetAccountQuery;
+import com.amazonaws.amplify.generated.graphql.GetFoodQuery;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -40,6 +44,7 @@ import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,40 +58,50 @@ public class CaptureResult extends AppCompatActivity {
     static final int REQUEST_CODE_PICK_ACCOUNT = 101;
     static final int REQUEST_ACCOUNT_AUTHORIZATION = 102;
     static final int REQUEST_PERMISSIONS = 13;
-
+    private AWSAppSyncClient mAWSAppSyncClient = null;
     private static String accessToken;
-    private ImageView selectedImage;
-    private TextView labelResults;
-    private TextView textResults;
+   // private ImageView selectedImage;
+    //private TextView labelResults;
+    //private TextView textResults;
     private Account mAccount;
     private ProgressDialog mProgressDialog;
+    private  HealthData_Singleton singleton = HealthData_Singleton.getInstance();
+    private ArrayList<MenuList> menudata = new ArrayList<MenuList>();
 
-    private List<String> menu;
+    private ListView listview;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_capture_result);
+       // menudata = new ArrayList<MenuList>();
+
+        listview = findViewById(R.id.list_menu);
+
+
+
 
         mProgressDialog = new ProgressDialog(this);
 
-        Button selectImageButton = findViewById(R.id.select_image_button);
-        selectedImage = findViewById(R.id.selected_image);
-        labelResults = findViewById(R.id.tv_label_results);
-        textResults = findViewById(R.id.tv_texts_results);
+        //Button selectImageButton = findViewById(R.id.select_image_button);
+        //selectedImage = findViewById(R.id.selected_image);
+        //labelResults = findViewById(R.id.tv_label_results);
+        //textResults = findViewById(R.id.tv_texts_results);
         //launchImagePicker();
 
         ActivityCompat.requestPermissions(CaptureResult.this,
                 new String[]{Manifest.permission.GET_ACCOUNTS},
                 REQUEST_PERMISSIONS);
-        selectImageButton.setOnClickListener(new View.OnClickListener() {
+        /*selectImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActivityCompat.requestPermissions(CaptureResult.this,
                         new String[]{Manifest.permission.GET_ACCOUNTS},
                         REQUEST_PERMISSIONS);
             }
-        });
+        });*/
     }
 
     private void launchImagePicker() {
@@ -149,7 +164,7 @@ public class CaptureResult extends AppCompatActivity {
                 Bitmap bitmap = resizeBitmap(
                         MediaStore.Images.Media.getBitmap(getContentResolver(), uri));
                 callCloudVision(bitmap);
-                selectedImage.setImageBitmap(bitmap);
+                //selectedImage.setImageBitmap(bitmap);
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage());
             }
@@ -212,7 +227,7 @@ public class CaptureResult extends AppCompatActivity {
 
             protected void onPostExecute(BatchAnnotateImagesResponse response) {
                 mProgressDialog.dismiss();
-                textResults.setText(getDetectedTexts(response));
+                //textResults.setText(getDetectedTexts(response));
                 Log.d("capture",getDetectedTexts(response).toString()+"    text is string?");
                 String[] words = getDetectedTexts(response).split("\\n+");
                 for (int i = 0; i < words.length; i++) {
@@ -224,12 +239,73 @@ public class CaptureResult extends AppCompatActivity {
                     }
                     else
                     {
-                        Log.d("list",words[i]+"   replace..");
+
+                        if(words[i].contains("멸치국수"))
+                        {
+                            Log.d("list",words[i]+"   replace..");
+                            GetDB("멸치국수");
+                        }
+                        if(words[i].contains("콩국수"))
+                        {
+                            Log.d("list",words[i]+"   replace..");
+                            GetDB("콩국수");
+                        }
+                        if(words[i].contains("고기국수"))
+                        {
+                            Log.d("list",words[i]+"   replace..");
+                            GetDB("고기국수");
+                        }
+                        if(words[i].contains("비빔국수"))
+                        {
+                            GetDB("비빔국수");
+                        }
                     }
 
 
                 }
-                labelResults.setText(getDetectedLabels(response));
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after 5s = 5000ms
+                        Log.d("tag",menudata.size()+"  last size...");
+                        //Toast.makeText(getApplicationContext(),menudata.size(),Toast.LENGTH_LONG).show();
+                        MenuAdapter adapter = new MenuAdapter(menudata);
+
+                        adapter.notifyDataSetChanged();
+                        listview.setAdapter(adapter);
+                        listview.setOnItemClickListener(
+                                new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        MenuList item = (MenuList) adapter.getItem(position);
+                                        //Toast.makeText(getApplicationContext(),adapter.getCount(),Toast.LENGTH_LONG).show();
+                                        Log.d("item",item.getFoodname()+ "position!");
+                                        Intent intent = new Intent(getApplication(),MenuPopup.class);
+                                        intent.putExtra("menuname",item.getFoodname());
+                                        intent.putExtra("kcal",item.getKcal());
+                                        intent.putExtra("car",item.getCar());
+                                        intent.putExtra("pro",item.getPro());
+                                        intent.putExtra("fat",item.getFat());
+                                        startActivity(intent);
+                                    }
+                                }
+                        );
+
+                        Log.d("tag","  last size... notified");
+                        //labelResults.setText(getDetectedLabels(response));
+                    }
+
+                }, 5000);
+                //menudata.add(new MenuList("멸치국수",""));
+                //MenuAdapter adapter = new MenuAdapter(menudata);
+
+                //adapter.notifyDataSetChanged();
+
+
+
+
             }
 
         }.execute();
@@ -318,5 +394,36 @@ public class CaptureResult extends AppCompatActivity {
     public void onTokenReceived(String token){
         accessToken = token;
         launchImagePicker();
+    }
+
+    public void GetDB(String foodname)
+    {
+        Log.d("tag",foodname+"...foodname?");
+        singleton.mClient.query(GetFoodQuery.builder().id(foodname)
+                .build())
+                .enqueue(new com.apollographql.apollo.GraphQLCall.Callback<GetFoodQuery.Data>() {
+                    @Override
+                    public void onResponse(@Nonnull Response<GetFoodQuery.Data> response) {
+                        Log.d("checkkk",response.data().getFood().food().size()+ "foodname?><");
+                        Log.d("checkkk",response.data().getFood().food().get(0).id()+ "foodname?><");
+                        Log.d("checkkk",response.data().getFood().id()+ "foodname?><");
+                        if (response.data().getFood().food().get(0) != null) {
+                            Log.d("checkkk", "찾음"+response.data().getFood().food().get(0).id().toString());
+                            menudata.add(new MenuList(response.data().getFood().id().toString(),""
+                            ,response.data().getFood().food().get(0).cal().toString()
+                            ,response.data().getFood().food().get(0).car().toString()
+                            ,response.data().getFood().food().get(0).pro().toString()
+                            ,response.data().getFood().food().get(0).fat().toString()));//여기다가 칼로리 탄단지도 넣어야함 디비에서불러온거
+                        }
+                        Log.d("tag",menudata.size()+"  size...");
+                    }
+
+                    @Override
+                    public void onFailure(@Nonnull ApolloException e) {
+
+                    }
+                });
+
+
     }
 }
