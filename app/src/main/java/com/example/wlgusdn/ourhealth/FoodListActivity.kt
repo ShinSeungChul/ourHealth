@@ -135,11 +135,11 @@ class FoodListActivity : AppCompatActivity
                                     val day_fat =llist!![position].fat()
 
 
+
                                     //클릭한 음식의 데이터를 받아와 DayInput으로 만들고 Date에 넣는다
                                     val dd =DayInput.builder()
-                                        .id(AWSMobileClient.getInstance().identityId)
+                                        .id(day_name)
                                         .time(strdate)
-                                        .food(day_name)
                                         .kcal(day_kcal)
                                         .pro(day_pro)
                                         .car(day_car)
@@ -148,6 +148,9 @@ class FoodListActivity : AppCompatActivity
 
                                     Log.d("wlgusdn111",dd.toString())
                                     daydata!!.add(dd)
+
+
+
 
                                     val input = CreateDateInput.builder()
                                         .id(AWSMobileClient.getInstance().identityId)
@@ -178,7 +181,7 @@ class FoodListActivity : AppCompatActivity
                                     var format2: SimpleDateFormat? = null
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                                     {
-                                        format1 = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+                                        format2 = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
 
                                         strdate = format2!!.format(today)
 
@@ -204,10 +207,10 @@ class FoodListActivity : AppCompatActivity
 
 
 
-                                    listt.add(GetDateQuery.Date(listt[0].__typename(),AWSMobileClient.getInstance().identityId,strdate,day_name,day_kcal,day_pro,day_car,day_fat))
+                                    listt.add(GetDateQuery.Date(listt[0].__typename(),day_name,strdate,null,day_kcal,day_pro,day_car,day_fat))
 
 
-                                    val llist : ArrayList<DayInput> = ArrayList<DayInput>()
+                                    val llist1 : ArrayList<DayInput> = ArrayList<DayInput>()
                                     for(data in listt)
                                     {
 
@@ -215,7 +218,7 @@ class FoodListActivity : AppCompatActivity
 
                                         val dd = DayInput.builder()
                                             .id(data.id())
-                                            .food(data.food())
+                                            .food(null)
                                             .time(data.time())
                                             .kcal(data.kcal())
                                             .pro(data.pro())
@@ -223,7 +226,7 @@ class FoodListActivity : AppCompatActivity
                                             .fat(data.fat())
                                             .build()
 
-                                        llist!!.add(
+                                        llist1!!.add(
                                             dd
                                         )
 
@@ -233,7 +236,7 @@ class FoodListActivity : AppCompatActivity
 
                                     val input = UpdateDateInput.builder()
                                         .id(AWSMobileClient.getInstance().identityId)
-                                        .date(llist)
+                                        .date(llist1)
                                         .build()
 
 

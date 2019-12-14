@@ -62,31 +62,17 @@ class FoodPopup : Activity()
 
 
                             runOnUiThread {
-
-
-
-
-
-
-
                                     var listt = response.data()!!.food!!.food()
-                                    Log.d("wlgusdn111",listt.toString())
 
-
-
+                                    for(ii in listt)
+                                    {
+                                        Log.d("TLqkf",ii.id()+"/"+ii.cal())
+                                    }
 
                                     listt=ArrayList(listt)
-
-
-
-
-
                                     llist = ArrayList<FoodDataInput>()
                                     for(data in listt)
                                     {
-
-
-
                                         val dd = FoodDataInput.builder()
                                             .id(data.id())
                                             .cal(data.cal())
@@ -97,24 +83,12 @@ class FoodPopup : Activity()
                                         Log.d("asdas",dd.id()+"/"+dd.cal().toString()+"/"+dd.car().toString()+"/"+dd.pro().toString()+"/"+dd.fat().toString())
 
                                         llist!!.add(dd)
-
-
-
                                     }
 
                                 Log.d("asdasd","123")
                                 val intent = Intent(this@FoodPopup,FoodListActivity::class.java)
 
                                 startActivity(intent)
-
-
-
-
-
-
-
-
-
                             }
 
                         }
