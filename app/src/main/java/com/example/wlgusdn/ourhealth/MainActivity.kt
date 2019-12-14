@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity()
 {
     val url = " https://1228u0kujc.execute-api.ap-northeast-2.amazonaws.com/post/hello"
 
-    lateinit var imageView : ImageView
     lateinit var myInfoBtn : ImageButton
     lateinit var foodBtn : ImageButton
     lateinit var menuBtn : ImageButton
@@ -126,7 +125,6 @@ class MainActivity : AppCompatActivity()
 
 
 
-        imageView = findViewById(R.id.ads)
         myInfoBtn= findViewById(R.id.todaybtn)
         foodBtn = findViewById(R.id.food)
         menuBtn = findViewById(R.id.menu)
@@ -339,11 +337,10 @@ class MainActivity : AppCompatActivity()
                 photoPath=data!!.getStringExtra("path")
                 var matrix = Matrix();
                 val bmp = BitmapFactory.decodeStream(FileInputStream(photoPath), null, null)
-                var bm = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
+              bm = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
 
 
 
-                imageView.setImageBitmap(bm)
 
                 saves3(photoPath!!)
             }
@@ -351,11 +348,10 @@ class MainActivity : AppCompatActivity()
                photoPath= data!!.getStringExtra("path")
                 var matrix = Matrix();
                 val bmp = BitmapFactory.decodeStream(FileInputStream(photoPath), null, null)
-                var bm = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
+                bm = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
 
 
 
-                imageView.setImageBitmap(bm)
 
                 saves3(photoPath!!)
 
@@ -368,4 +364,8 @@ class MainActivity : AppCompatActivity()
     }
 
 
+    companion object
+    {
+        var bm : Bitmap?=null
+    }
 }

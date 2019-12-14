@@ -168,6 +168,23 @@ class FoodListActivity : AppCompatActivity
                                 else
                                 {
 
+                                    val now = System.currentTimeMillis()
+
+
+
+                                    val today = Date(now)
+                                    var strdate: String? = null
+
+                                    var format2: SimpleDateFormat? = null
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                                    {
+                                        format1 = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+
+                                        strdate = format2!!.format(today)
+
+
+                                    }
+
                                     val day_name = llist!![position].id()
                                     val day_kcal = llist!![position].cal()
                                     val day_pro = llist!![position].pro()

@@ -18,10 +18,17 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.Toast
-import java.io.FileInputStream
 import android.R.attr.data
+import android.icu.text.SimpleDateFormat
+import android.os.Environment
+import android.support.v4.content.FileProvider
 import android.view.MotionEvent
-import java.io.ByteArrayOutputStream
+import kotlinx.android.synthetic.main.foodinsert.*
+import java.io.*
+import java.lang.Exception
+import java.net.URI
+import java.util.*
+import kotlin.random.Random
 
 
 class Popupselect : Activity()
@@ -35,7 +42,10 @@ class Popupselect : Activity()
     val REQUEST_TEXT_GALLERY = 4
     private val REQUEST_PERMISSION = 101
 
+    var file : File?=null
     var photoPath : String?=null;
+    var photoUri : Uri?=null
+    var photoFile : File? = null
 
     override fun onDestroy() {
         super.onDestroy()
@@ -63,9 +73,33 @@ class Popupselect : Activity()
                 override fun onClick(v: View?) {
 
 
-                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    startActivityForResult(intent, REQUEST_FOOD_CAPTURE)
+                    val takePictureIntent =Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    // Ensure that there's a camera activity to handle the intent
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        // Create the File where the photo should go
+                        photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch ( ex : IOException) {
+                            // Error occurred while creating the File
+                        }
+                        // Continue only if the File was successfully created
+                        if (photoFile != null)
+                        {
+                            val photoURI = FileProvider.getUriForFile(this@Popupselect,
+                            "com.example.wlgusdn.ourhealth.fileprovider",
+                            photoFile!!);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            startActivityForResult(takePictureIntent,REQUEST_FOOD_CAPTURE);
+                        }
+                    }
 
+
+
+
+                    /*  val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                   startActivityForResult(intent, REQUEST_FOOD_CAPTURE)
+*/
 
                 }
             })
@@ -88,8 +122,28 @@ class Popupselect : Activity()
                 override fun onClick(v: View?) {
 
 
-                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    startActivityForResult(intent, REQUEST_TEXT_CAPTURE)
+                    var photoFile : File? = null
+
+                    val takePictureIntent =Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    // Ensure that there's a camera activity to handle the intent
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        // Create the File where the photo should go
+                        photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch ( ex : IOException) {
+                            // Error occurred while creating the File
+                        }
+                        // Continue only if the File was successfully created
+                        if (photoFile != null)
+                        {
+                            val photoURI = FileProvider.getUriForFile(this@Popupselect,
+                                "com.example.wlgusdn.ourhealth.fileprovider",
+                                photoFile!!);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            startActivityForResult(takePictureIntent,REQUEST_FOOD_CAPTURE);
+                        }
+                    }
 
 
                 }
@@ -112,38 +166,59 @@ class Popupselect : Activity()
 
     }
 
+   fun createImageFile() : File?
+   {
+    // Create an image file name
+   val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date());
+    val imageFileName = "JPEG_" + timeStamp + "_";
+    val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    val image = File.createTempFile(
+            imageFileName,  /* prefix */
+    ".jpg",         /* suffix */
+    storageDir      /* directory */
+    );
+
+    // Save a file: path for use with ACTION_VIEW intents
+    photoPath = image.getAbsolutePath();
+    return image;
+}
+
+    fun getImageUri(inContext: Context, inImage: Bitmap): Uri {
+       val picName = "pic${Random(100000)}.jpg";
+        val PATH = Environment.getExternalStorageDirectory().getPath()+ picName;
+        val f = File(PATH);
+        val yourUri = Uri.fromFile(f);
+        return yourUri
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode)
         {
             REQUEST_FOOD_CAPTURE->{
-                Log.d("camera","request food capture...")
-                val selectedImage = data!!.getData();
-                var filePathColumn : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-                var cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
-                cursor.moveToFirst();
 
-                val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                val picturePath = cursor.getString(column_index);
+                if(resultCode== RESULT_OK)
+                {
+                    var ff = File(photoPath)
+                    var bit = MediaStore.Images.Media.getBitmap(contentResolver,Uri.fromFile(ff))
+                    if(bit!=null)
+                    {
+                        Toast.makeText(this@Popupselect,"사진생성",Toast.LENGTH_LONG).show()
+                    }
+                }
 
-                cursor.close();
-                // String picturePath contains the path of selected Image
-                photoPath = picturePath;
+                    var intent: Intent = Intent()
 
+                    intent.putExtra("path", photoPath)
 
-                var intent : Intent = Intent()
+                    setResult(RESULT_OK, intent)
+                    finish()
 
-                intent.putExtra("path",photoPath)
-
-                setResult(RESULT_OK,intent)
-                finish()
             }
             REQUEST_FOOD_GALLERY->{
 
 
                 val selectedImage = data!!.getData();
                 var filePathColumn : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-                var cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
+                var cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
                 cursor.moveToFirst();
 
                 val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
@@ -165,12 +240,21 @@ class Popupselect : Activity()
 
             }
             REQUEST_TEXT_CAPTURE->{
-                Log.d("camera","request menu capture...")
-                var intent : Intent = Intent()
+                if(resultCode== RESULT_OK)
+                {
+                    var ff = File(photoPath)
+                    var bit = MediaStore.Images.Media.getBitmap(contentResolver,Uri.fromFile(ff))
+                    if(bit!=null)
+                    {
+                        Toast.makeText(this@Popupselect,"사진생성",Toast.LENGTH_LONG).show()
+                    }
+                }
 
-                intent.putExtra("path",photoPath)
+                var intent: Intent = Intent()
 
-                setResult(RESULT_OK,intent)
+                intent.putExtra("path", photoPath)
+
+                setResult(RESULT_OK, intent)
                 finish()
             }
             REQUEST_TEXT_GALLERY->{

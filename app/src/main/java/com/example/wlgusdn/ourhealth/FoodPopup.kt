@@ -22,6 +22,7 @@ class FoodPopup : Activity()
     var tv : TextView?=null
     var bu_yes : Button?=null
     var bu_no : Button?=null
+    var iv : ImageView?=null
 
     var list : ArrayList<FoodDataInput>?= ArrayList<FoodDataInput>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +33,8 @@ class FoodPopup : Activity()
 
 
         tv = findViewById(R.id.food_text)
+        iv = findViewById(R.id.food_image)
+        iv!!.setImageBitmap(MainActivity.bm)
 
         bu_yes = findViewById(R.id.food_yes)
 
