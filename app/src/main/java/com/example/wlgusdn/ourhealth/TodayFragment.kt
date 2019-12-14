@@ -32,19 +32,23 @@ class TodayFragment : Fragment()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.today, container, false) as View
         text = view.findViewById(R.id.editHealthDateValue1)
-        text.setText("1280(-" + singleton.kcal+")")
+
 
         val chart = view.findViewById<BarChart>(R.id.chart)
         listview = view.findViewById(R.id.list)
 
 
-        //todaydata = singleton.GetTodayKcalList()
-        todaydata.add(TodayKcalList("09:00","짜장면",863,0,0,0))
-        todaydata.add(TodayKcalList("13:00","짜장면",863,0,0,0))
-        todaydata.add(TodayKcalList("18:00","짜장면",863,0,0,0))
-        todaydata.add(TodayKcalList("19:00","짜장면",863,0,0,0))
-        todaydata.add(TodayKcalList("21:00","짜장면",863,0,0,0))
-        todaydata.add(TodayKcalList("29:00","짜장면",863,0,0,0))
+        todaydata = singleton.todayKcalLists
+
+
+        todaydata.add(TodayKcalList("09","짜장면",863,0,0,0))
+        todaydata.add(TodayKcalList("13","짜장면",863,0,0,0))
+        todaydata.add(TodayKcalList("18","짜장면",863,0,0,0))
+        todaydata.add(TodayKcalList("19","짜장면",863,0,0,0))
+        todaydata.add(TodayKcalList("21","짜장면",863,0,0,0))
+
+        text.text = singleton.GetTodayEatKcal().toString()+"(-" + singleton.kcal+")"
+
 
 
         val adapter = TodayKcalAdapter(todaydata)
@@ -56,11 +60,13 @@ class TodayFragment : Fragment()
 
 
 
-        for(x in 0..24)
+        for(x in todaydata)
         {
-            val randomValues =  Random.nextInt(0, 800)
-            if(x== 9 || x== 13 || x==18 || x== 23)
-                entries.add(BarEntry(x.toFloat(), randomValues.toFloat()))
+
+
+            entries.add(BarEntry(x.time!!.toFloat(),x.kcal!!.toFloat()))
+
+
 
 
         }

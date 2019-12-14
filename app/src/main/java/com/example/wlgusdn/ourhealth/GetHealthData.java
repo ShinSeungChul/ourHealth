@@ -103,7 +103,7 @@ public class GetHealthData extends Activity {
                         //날짜 차이 구하기 샘플(나중에 디비에 사용할 코드)
 
                         try {
-                            String date1 = "2019/12/05 17:37:30";
+                            String date1 = "2019/12/14 17:37:30";
                             String date2 = "2019/10/05 08:37:30";
                             //String current = Calendar.getInstance(Locale.KOREA).getTime().toString();
                             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd ");
@@ -115,7 +115,7 @@ public class GetHealthData extends Activity {
                             String date_text = new SimpleDateFormat("yyyy/MM/dd ", Locale.KOREA).format(currentTime);
                             currentTime = format.parse(date_text);
 
-                            long calDate = firstdate.getTime() - seconddate.getTime();
+                            long calDate = currentTime.getTime() - firstdate.getTime();
                             long calDateday = calDate / (24*60*60*1000);
                             calDateday = Math.abs(calDateday);
                             Log.d("tag",currentTime+ "     \n"+calDateday+"days");

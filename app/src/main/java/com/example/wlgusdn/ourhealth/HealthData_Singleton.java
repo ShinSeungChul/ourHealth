@@ -19,7 +19,7 @@ public class HealthData_Singleton {
     private ArrayList<Entrydata> weeklist;
     private ArrayList<Entrydata> monthlist;
 
-    private ArrayList<TodayKcalList> todayKcalLists;
+    public ArrayList<TodayKcalList> todayKcalLists;
     private ArrayList<TodayWorkoutList> todayWorkoutLists;
     private Day30List day30Lists[];//dat30list workout -> chartdata
     public ArrayList<AllFood> allFoods;
@@ -31,7 +31,16 @@ public class HealthData_Singleton {
     public AWSAppSyncClient mClient;
     public ClientData clientData;
 
+    public int GetTodayEatKcal()
+    {
+        int total = 0;
+        for(int i = 0 ; i < todayKcalLists.size() ; i++)
+        {
+            total += todayKcalLists.get(i).getKcal();
 
+        }
+        return total;
+    }
     public static HealthData_Singleton getInstance() {
         Log.d("tag", "get instance");
         return ourInstance;
@@ -39,6 +48,74 @@ public class HealthData_Singleton {
     public void SetClient(AWSAppSyncClient client)
     {
         mClient = client;
+    }
+
+
+    public void Compute_balance()
+    {
+        float totalfat=0;
+        float totalpro=0;
+        float totalcar=0;
+        float totalcal=0;
+        int breakfast = 0;
+        int dinner = 0;
+        int launch = 0;
+        int extracount = 0;
+        for(int i = 0 ; i <30 ; i++)//0이 오래된거
+        {
+            totalfat += day30Lists[i].getFat();
+            totalcar += day30Lists[i].getCarbohydrate();
+            totalpro += day30Lists[i].getProtein();
+            totalcal += day30Lists[i].getKcal();
+
+            int time = Integer.parseInt(day30Lists[i].getTime());
+
+            if(time>=04 && time <=10)
+            {
+                breakfast += time;
+            }
+            else if(time >=11 && time <= 16)
+            {
+                launch += time;
+            }
+            else if(time >= 17 && time <=21)
+            {
+                dinner += time;
+            }
+            else
+            {
+                extracount++;
+            }
+
+
+        }
+        totalfat = totalfat/30;
+        totalcal = totalcal/30;
+        totalcar = totalcar/30;
+        totalpro = totalpro/30;
+
+        float fatpercent = (totalfat/(totalcar+totalfat+totalpro))*100;
+        float carpercent = (totalcar/(totalcar+totalfat+totalpro))*100;
+        float propercent = (totalcar/(totalcar+totalfat+totalpro))*100;
+        clientData.setCarper(carpercent);
+        clientData.setFatper(fatpercent);
+        clientData.setProper(propercent);
+        clientData.setTcar(totalcar);
+        clientData.setTfat(totalfat);
+        clientData.setTpro(totalpro);
+        clientData.setCalavg(totalcal);
+
+        breakfast = breakfast/30;
+        launch = launch/30;
+        dinner = dinner/30;
+
+        clientData.setBreakfasttime(breakfast);
+        clientData.setLaunchtime(launch);
+        clientData.setDinnertime(dinner);
+        clientData.setExtracount(extracount);
+
+
+
     }
 
 
@@ -92,12 +169,12 @@ public class HealthData_Singleton {
     {
         for(int i = 0 ; i< day30Lists.length ; i++)
         {
-            day30Lists[i].setWorkoutKcal(steplist[i]);
-            day30Lists[i].setWorkoutKcal(floorlist[i]);
-            day30Lists[i].setWorkoutKcal(exerciselist[i]);
+            day30Lists[i].setWorkoutKcal(steplist[29-i]);
+            day30Lists[i].setWorkoutKcal(floorlist[29-i]);
+            day30Lists[i].setWorkoutKcal(exerciselist[29-i]);
             Log.d("result","result "+i+"  "+day30Lists[i].getWorkoutKcal());
         }
-        samsungkcal = day30Lists[0].getWorkoutKcal();
+        samsungkcal = day30Lists[29].getWorkoutKcal();
 
 
     }
@@ -148,9 +225,9 @@ public class HealthData_Singleton {
     }
     public float Progress()
     {
-        float sum = eatkcal - samsungkcal;
-        if(eatkcal !=0)
-            return (sum/daily)*100;
+        float sum = GetTodayEatKcal() - samsungkcal;
+        if(GetTodayEatKcal()>samsungkcal)
+            return (sum/clientData.getKcal())*100;
         else
             return 0;
     }
@@ -160,6 +237,7 @@ public class HealthData_Singleton {
 
     private HealthData_Singleton() {
 
+        todayKcalLists = new ArrayList();
         day30Lists = new Day30List[30];
         allFoods = new ArrayList();
         clientData = new ClientData("","",0,0,0,0,0,0,0);

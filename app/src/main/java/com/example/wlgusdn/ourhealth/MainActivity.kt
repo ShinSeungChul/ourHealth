@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity()
             }
         }
 
-        Foodsearch = findViewById(R.id.button6)
+       // Foodsearch = findViewById(R.id.button6)
 
 
 
@@ -326,8 +326,8 @@ class MainActivity : AppCompatActivity()
 
     fun setProgressText()
     {
-        mykcal.text = singleton.eatkcal.toString() +"(-" + singleton.kcal + ")"
-        dailyKcal.text = "/" + singleton.daily + "kcal"
+        mykcal.text = singleton.GetTodayEatKcal().toString() +"(-" + singleton.kcal + ")"
+        dailyKcal.text = "/" + singleton.clientData.kcal + "kcal"//여기가 권장섭취량
         progress.setProgress(singleton.Progress())
     }
 

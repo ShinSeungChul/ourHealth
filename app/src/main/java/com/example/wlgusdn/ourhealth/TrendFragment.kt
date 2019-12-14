@@ -52,13 +52,65 @@ class TrendFragment : Fragment()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.trends, container, false) as View
 
-        day30List = singleton.day30Lists
+        day30List = singleton.day30Lists//0-29 29가 최근(오늘)
 
         listview = view.findViewById(R.id.list)
 
-        trendata.add(TrendList("지방섭취가 평균보다 높습니다"))
-        trendata.add(TrendList("최근 칼로리 섭취가 높습니다"))
-        trendata.add(TrendList("식사패턴이 불규칙 합니다."))
+        var day5List : ArrayList<Day30List> = ArrayList()
+        for(i in 24 until 29)
+        {
+            if(day30List[i].kcal != null)
+                day5List.add(day30List[i])
+        }
+
+        var recentfat = 0f
+        var recentpro = 0f
+        var recentcar = 0f
+        var recentcal = 0f
+        for(i in 0 until day5List.size)
+        {
+            recentcal += day5List[i].kcal!!
+            recentcar += day5List[i].carbohydrate!!
+            recentfat += day5List[i].fat!!
+            recentpro += day5List[i].protein!!
+        }
+        recentcal = recentcal/5
+        recentcar = recentcar/5
+        recentpro = recentpro/5
+        recentfat = recentfat/5
+
+        if(recentcal > singleton.clientData.calavg!!)
+        {
+            trendata.add(TrendList("최근 칼로리 섭취가 높습니다"))
+        }
+        if(recentcar > singleton.clientData.tcar!!)
+        {
+            trendata.add(TrendList("최근 탄수화물 섭취가 높습니다"))
+        }
+        if(recentpro < singleton.clientData.tpro!!)
+        {
+            trendata.add(TrendList("최근 단백질 섭취가 낮습니다"))
+        }
+        if(recentfat > singleton.clientData.tfat!!)
+        {
+            trendata.add(TrendList("최근 지방 섭취가 높습니다"))
+        }
+        if(singleton.clientData.carper!! > 50)
+        {
+            trendata.add(TrendList("탄수화물 비율이 너무 높습니다"))
+        }
+        if(singleton.clientData.proper!! < 30)
+        {
+            trendata.add(TrendList("단백질 섭취가 부족합니다"))
+        }
+        if(singleton.clientData.fatper!! > 20)
+        {
+            trendata.add(TrendList("지방의 비율이 너무 높습니다"))
+        }
+
+
+
+
 
 
         val adapter = TrendAdapter(trendata)
@@ -72,8 +124,9 @@ class TrendFragment : Fragment()
 
             for(x in 1 until 31)
             {
-                val randomValues =  Random.nextInt(1500, 1800)
+
                 entry.add(Entry(x.toFloat(),day30List[x-1].getWorkoutKcal().toFloat()))
+
             }
             var set : LineDataSet = LineDataSet(entry,"Fat")
             set.setColor(Color.parseColor("#000000"))
@@ -90,7 +143,16 @@ class TrendFragment : Fragment()
             for(x in 1 until 31)
             {
                 val randomValues =  Random.nextInt(2000, 3000)
-                entry.add(BarEntry(x.toFloat(),randomValues.toFloat()))
+                //entry.add(BarEntry(x.toFloat(),randomValues.toFloat()))
+                if(day30List[x-1].kcal != null)
+                {
+                    entry.add(BarEntry(x.toFloat(),day30List[x-1].kcal!!.toFloat()))
+                }
+                else
+                {
+                    entry.add(BarEntry(x.toFloat(),0f))
+                }
+
             }
             var set : BarDataSet = BarDataSet(entry,"Kcal")
             set.setColor(Color.parseColor("#FF8EFF7F"))

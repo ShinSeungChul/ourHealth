@@ -51,7 +51,7 @@ class TodayKcalAdapter(Data : ArrayList<TodayKcalList>) : BaseAdapter()
         val food = convertView!!.findViewById<TextView>(R.id.foodname)
         val kcal = convertView!!.findViewById<TextView>(R.id.kcal)
 
-        time.setText(todayKcalList[position].time)
+        time.setText(todayKcalList[position].time +":00")
         food.setText(todayKcalList[position].foodname)
         kcal.setText(todayKcalList[position].kcal.toString() + " kcal")
 
