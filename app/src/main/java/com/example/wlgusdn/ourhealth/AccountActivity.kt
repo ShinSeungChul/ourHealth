@@ -127,7 +127,56 @@ class AccountActivity : AppCompatActivity()
 
     if(AWSMobileClient.getInstance().identityId!=null) {
 
-        mAWSAppSyncClient!!.query(GetDateQuery.builder().id(AWSMobileClient.getInstance().identityId/*"멸치국수"*/).build())
+        mAWSAppSyncClient!!.query(GetAccountQuery.builder().id(AWSMobileClient.getInstance().identityId/*"멸치국수"*/).build())
+            .enqueue(object : com.apollographql.apollo.GraphQLCall.Callback<GetAccountQuery.Data>() {
+                override fun onResponse(response: com.apollographql.apollo.api.Response<GetAccountQuery.Data>) {
+
+
+                    runOnUiThread {
+                        Log.d("checkkk",response.data()!!.account.toString())
+                        if (response.data()!!.account != null) {
+                            singleton.clientData.kcal = response.data()!!.account!!.cal()
+                            singleton.clientData.id = response.data()!!.account!!.id()
+                            singleton.clientData.name = response.data()!!.account!!.name()
+                            singleton.clientData.height = response.data()!!.account!!.height()
+                            singleton.clientData.weight = response.data()!!.account!!.weight()
+                            singleton.clientData.car = response.data()!!.account!!.car()
+                            singleton.clientData.pro = response.data()!!.account!!.pro()
+                            singleton.clientData.fat = response.data()!!.account!!.fat()
+
+                            Log.d("checkkk", "singleton user     "+singleton.clientData.id)
+
+                            //여기서 clientdata.id 로 date data 받아와야함
+
+
+                            //Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
+                            //Log.d("checkkk", "찾음"+response.data()!!.account!!.cal().toString())
+                            // Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
+                            //  Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
+                            Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
+
+
+
+                        }
+
+                    }
+
+                }
+
+
+
+
+                override fun onFailure(e: ApolloException) {
+
+                    Log.d("searchget", "Fail")
+                }
+
+
+            }
+            )
+
+
+        mAWSAppSyncClient!!.query(GetDateQuery.builder().id(AWSMobileClient.getInstance().identityId).build())
             .enqueue(object : com.apollographql.apollo.GraphQLCall.Callback<GetDateQuery.Data>() {
                 override fun onResponse(response: com.apollographql.apollo.api.Response<GetDateQuery.Data>) {
 
