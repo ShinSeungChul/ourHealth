@@ -22,6 +22,8 @@ public class HealthData_Singleton {
     private ArrayList<TodayKcalList> todayKcalLists;
     private ArrayList<TodayWorkoutList> todayWorkoutLists;
     private Day30List day30Lists[];//dat30list workout -> chartdata
+    public ArrayList<AllFood> allFoods;
+
     private int steplist[] = new int[30];//for day30list
     private int floorlist[] = new int[30];//for day30list
     private int exerciselist[] = new int[30];//for day30list
@@ -38,6 +40,8 @@ public class HealthData_Singleton {
     {
         mClient = client;
     }
+
+
 
     public void TimeToHour(String time,String kcal)
     {
@@ -157,6 +161,7 @@ public class HealthData_Singleton {
     private HealthData_Singleton() {
 
         day30Lists = new Day30List[30];
+        allFoods = new ArrayList();
         clientData = new ClientData("","",0,0,0,0,0,0,0);
         for(int i = 0 ; i < 30 ; i++)
         {

@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.*
 import com.amazonaws.amplify.generated.graphql.CreateAccountMutation
 import com.amazonaws.amplify.generated.graphql.GetAccountQuery
+import com.amazonaws.amplify.generated.graphql.GetDateQuery
 import com.amazonaws.amplify.generated.graphql.UpdateAccountMutation
 import com.amazonaws.mobile.client.AWSMobileClient
 import com.amazonaws.mobile.config.AWSConfiguration
@@ -17,7 +18,10 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility
 import com.apollographql.apollo.GraphQLCall
 import com.apollographql.apollo.exception.ApolloException
 import type.CreateAccountInput
+import type.DayInput
+import type.FoodDataInput
 import java.lang.Exception
+import java.text.SimpleDateFormat
 
 class AccountActivity : AppCompatActivity()
 {
@@ -117,7 +121,7 @@ class AccountActivity : AppCompatActivity()
                     }
                 }).build()
 
-        singleton.mClient = mAWSAppSyncClient;
+        singleton.mClient = mAWSAppSyncClient
 
 
 
@@ -142,6 +146,9 @@ class AccountActivity : AppCompatActivity()
 
                             Log.d("checkkk", "singleton user     "+singleton.clientData.id)
 
+                            //여기서 clientdata.id 로 date data 받아와야함
+
+
                             //Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
                             //Log.d("checkkk", "찾음"+response.data()!!.account!!.cal().toString())
                             // Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
@@ -149,13 +156,15 @@ class AccountActivity : AppCompatActivity()
                             Log.d("checkkk", "찾음"+response.data()!!.account!!.toString())
 
 
-                            val intent = Intent(this@AccountActivity, MainActivity::class.java)
-                            startActivity(intent)
+
                         }
 
                     }
 
                 }
+
+
+
 
                 override fun onFailure(e: ApolloException) {
 
@@ -165,6 +174,90 @@ class AccountActivity : AppCompatActivity()
 
             }
             )
+
+        mAWSAppSyncClient!!.query(GetDateQuery.builder().id(AWSMobileClient.getInstance().identityId/*"멸치국수"*/).build())
+            .enqueue(object : com.apollographql.apollo.GraphQLCall.Callback<GetDateQuery.Data>() {
+                override fun onResponse(response: com.apollographql.apollo.api.Response<GetDateQuery.Data>) {
+
+
+                    runOnUiThread {
+
+
+                        Log.d("checkkk",response.data()!!.date.toString())
+                        if (response.data()!!.date!!.date() != null) {
+
+                            var date_list = response.data()!!.date!!.date()
+                            date_list = ArrayList(date_list)
+                            llist = ArrayList()
+                            //for 문 결과가 다같음 i == 1 일때만 출력됨?
+                            for(i in date_list)
+                            {
+                                var date_aws : String = i.time()!!
+                                val data = DayInput.builder()
+                                    .id(i.id())
+                                    .time(i.time())
+                                    .food(i.food())
+                                    .kcal(i.kcal())
+                                    .pro(i.pro())
+                                    .car(i.car())
+                                    .fat(i.fat())
+                                    .build()
+
+                                val format : SimpleDateFormat = SimpleDateFormat("yyyy/MM/dd")
+                                val format2 = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+                                var date  = format.parse(data.time())
+                                var hour = format2.parse(data.time())
+
+                                Log.d("clock",date.toString()+"///"+ i.food()+"////")
+
+
+                                    singleton.allFoods.add(
+                                    AllFood(
+                                        date.toString()
+                                        ,hour.toString()
+                                        ,i.food()!!
+                                        ,i.kcal()!!
+                                        ,i.car()!!
+                                        ,i.pro()!!
+                                        ,i.fat()!!
+                                    )
+
+                                )
+                                    //Log.d("jeong",singleton.allFoods[i].time+" : time")
+                            }
+
+
+
+
+
+
+
+                        }
+                        else
+                        {
+                            Toast.makeText(applicationContext,"no data",Toast.LENGTH_LONG).show()
+                        }
+
+                        val intent = Intent(this@AccountActivity, MainActivity::class.java)
+                        startActivity(intent)
+
+                    }
+
+                }
+
+
+
+
+                override fun onFailure(e: ApolloException) {
+
+                    Log.d("searchget", "Fail")
+                }
+
+
+            }
+            )
+
+
 
 
     }
@@ -295,14 +388,14 @@ class AccountActivity : AppCompatActivity()
 
         mAWSAppSyncClient!!.mutate(addBodyMutation).enqueue(CreatemutateCallback)
 
-        val intent = Intent(this@AccountActivity,MainActivity::class.java)
-        startActivity(intent)
 
     }
     companion object
     {
         var mAWSAppSyncClient : AWSAppSyncClient?=null
         var transferUtility : TransferUtility?=null
+        var llist  : ArrayList<DayInput>?=null
     }
+
 
 }
