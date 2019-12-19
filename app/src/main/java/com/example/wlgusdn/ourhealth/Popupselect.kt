@@ -193,21 +193,47 @@ class Popupselect : Activity()
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode)
         {
-            REQUEST_FOOD_CAPTURE->{
 
+            REQUEST_FOOD_CAPTURE->{
+                var temp :File?=null
+                var name :String?=null
                 if(resultCode== RESULT_OK)
                 {
                     var ff = File(photoPath)
-                    var bit = MediaStore.Images.Media.getBitmap(contentResolver,Uri.fromFile(ff))
+                    var bit =getResizedBitmap( MediaStore.Images.Media.getBitmap(contentResolver,Uri.fromFile(ff)),100,100)
+
+                    val sto = cacheDir
+                 name = "pic${Random(100000)}.jpg"
+                  temp = File(sto,name)
+                    try
+                    {
+
+                        temp.createNewFile()
+
+                        val out = FileOutputStream(temp)
+
+                        bit.compress(Bitmap.CompressFormat.PNG,100,out)
+
+                        out.close()
+
+                    }
+                    catch(e : Exception)
+                    {
+
+                    }
+
                     if(bit!=null)
                     {
                         Toast.makeText(this@Popupselect,"사진생성",Toast.LENGTH_LONG).show()
                     }
+
+
                 }
 
                     var intent: Intent = Intent()
 
-                    intent.putExtra("path", photoPath)
+
+                    intent.putExtra("path",cacheDir.toString()+"/"+name)
 
                     setResult(RESULT_OK, intent)
                     finish()
@@ -293,6 +319,7 @@ class Popupselect : Activity()
     fun getResizedBitmap(image: Bitmap, newHeight:Int, newWidth:Int): Bitmap {
         var width = image.width
         var height = image.height
+        Log.d("asdaa",width.toString()+"/"+height.toString())
 
         var scaleWidth = ((newWidth) / width).toFloat();
         var scaleHeight = (( newHeight) / height).toFloat();
@@ -303,9 +330,11 @@ class Popupselect : Activity()
             //matrix.postRotate(90);
         }
         // recreate the new Bitmap
+        var ratio = 40.0/width
+        var width1 = width * ratio
+        var height1 = height * ratio
 
-        var resizedBitmap = Bitmap.createBitmap(image, 1, 1, width-2, height-2,
-            matrix, false);
+        var resizedBitmap = Bitmap.createScaledBitmap(image,(height/10).toInt(),(width/10).toInt(),true)
         return resizedBitmap;
     }
 

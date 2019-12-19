@@ -1,5 +1,6 @@
 package com.example.wlgusdn.ourhealth
 
+import android.app.Activity
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Build
@@ -266,6 +267,8 @@ class FoodListActivity : AppCompatActivity
 
                     }
                     )
+                val intent = intent
+                setResult(Activity.RESULT_OK,intent)
                 finish()
             }
         })

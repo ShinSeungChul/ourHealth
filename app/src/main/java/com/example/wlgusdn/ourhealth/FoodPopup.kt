@@ -88,7 +88,7 @@ class FoodPopup : Activity()
                                 Log.d("asdasd","123")
                                 val intent = Intent(this@FoodPopup,FoodListActivity::class.java)
 
-                                startActivity(intent)
+                                startActivityForResult(intent,0)
                             }
 
                         }
@@ -119,6 +119,20 @@ class FoodPopup : Activity()
 
 
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode==0)
+        {
+            if(resultCode== RESULT_OK)
+            {
+                finish()
+            }
+        }
+
+    }
+
     companion object
     {
         var llist  : ArrayList<FoodDataInput>?=null
