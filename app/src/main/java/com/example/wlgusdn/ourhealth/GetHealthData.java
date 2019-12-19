@@ -102,7 +102,7 @@ public class GetHealthData extends Activity {
 
                         //날짜 차이 구하기 샘플(나중에 디비에 사용할 코드)
 
-                        try {
+                        /*try {
                             String date1 = "2019/12/14 17:37:30";
                             String date2 = "2019/10/05 08:37:30";
                             //String current = Calendar.getInstance(Locale.KOREA).getTime().toString();
@@ -122,7 +122,7 @@ public class GetHealthData extends Activity {
                         } catch (ParseException e) {
                             e.printStackTrace();
                             Log.d("error",e.toString()+"    error....");
-                        }
+                        }*/
 
                     }
 

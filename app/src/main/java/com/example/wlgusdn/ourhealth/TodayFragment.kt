@@ -41,11 +41,7 @@ class TodayFragment : Fragment()
         todaydata = singleton.todayKcalLists
 
 
-        todaydata.add(TodayKcalList("09","짜장면",863,0,0,0))
-        todaydata.add(TodayKcalList("13","짜장면",863,0,0,0))
-        todaydata.add(TodayKcalList("18","짜장면",863,0,0,0))
-        todaydata.add(TodayKcalList("19","짜장면",863,0,0,0))
-        todaydata.add(TodayKcalList("21","짜장면",863,0,0,0))
+
 
         text.text = singleton.GetTodayEatKcal().toString()+"(-" + singleton.kcal+")"
 

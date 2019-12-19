@@ -16,9 +16,6 @@ public class HealthData_Singleton {
     private int eatkcal;//aws eatkcalsum
 
     private ArrayList<BarEntry> daylist;
-    private ArrayList<Entrydata> weeklist;
-    private ArrayList<Entrydata> monthlist;
-
     public ArrayList<TodayKcalList> todayKcalLists;
     private ArrayList<TodayWorkoutList> todayWorkoutLists;
     private Day30List day30Lists[];//dat30list workout -> chartdata
@@ -169,12 +166,12 @@ public class HealthData_Singleton {
     {
         for(int i = 0 ; i< day30Lists.length ; i++)
         {
-            day30Lists[i].setWorkoutKcal(steplist[29-i]);
-            day30Lists[i].setWorkoutKcal(floorlist[29-i]);
-            day30Lists[i].setWorkoutKcal(exerciselist[29-i]);
+            day30Lists[i].setWorkoutKcal(steplist[i]);
+            day30Lists[i].setWorkoutKcal(floorlist[i]);
+            day30Lists[i].setWorkoutKcal(exerciselist[i]);
             Log.d("result","result "+i+"  "+day30Lists[i].getWorkoutKcal());
         }
-        samsungkcal = day30Lists[29].getWorkoutKcal();
+        samsungkcal = day30Lists[0].getWorkoutKcal();
 
 
     }
@@ -191,15 +188,7 @@ public class HealthData_Singleton {
     //it just call once when you launch the app... if you want add only a data you use another method :>
     //현우가 이거를 써야되는데 aws 에서 데이터를 받아올 떄 array 형태면 쓸수 있는데 단일 데이터면 다시 함수 만들어야함
     //json -> array -> ok          json -> data -> no
-    public void SetTodayKcalList(ArrayList<TodayKcalList> item)
-    {
-        for(int i = 0 ; i < item.size() ; i++)
-        {
-            todayKcalLists.add(item.get(i));//add to list todaykcallist (for listview...)
-            TimeToHour(item.get(i).getTime(),item.get(i).getKcal().toString());//also add to list dailylist (for chart...)
-        }
 
-    }
 
     public ArrayList<TodayKcalList> GetTodayKcalList()
     {
@@ -231,9 +220,7 @@ public class HealthData_Singleton {
         else
             return 0;
     }
-    public ArrayList<BarEntry> getDaylist() {
-        return daylist;
-    }
+
 
     private HealthData_Singleton() {
 
@@ -251,8 +238,5 @@ public class HealthData_Singleton {
         }
 
     }
-    public void GetAWSDB()
-    {
 
-    }
 }

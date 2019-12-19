@@ -21,7 +21,9 @@ import type.CreateAccountInput
 import type.DayInput
 import type.FoodDataInput
 import java.lang.Exception
+import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.*
 
 class AccountActivity : AppCompatActivity()
 {
@@ -214,7 +216,7 @@ class AccountActivity : AppCompatActivity()
 
                                 singleton.allFoods.add(
                                     AllFood(
-                                        date.toString()
+                                        i.time().toString()
                                         ,hour.hours.toString()
                                         ,i.id()!!
                                         ,i.kcal()!!
@@ -226,9 +228,41 @@ class AccountActivity : AppCompatActivity()
                                 )
                                 //Log.d("jeong",singleton.allFoods[i].time+" : time")
                             }
+                            try {
+
+                                Log.d("clock","start clock")
+                                val format = SimpleDateFormat("yyyy/MM/dd ")
+                                var currentTime = Calendar.getInstance().time
+                                val date_text = SimpleDateFormat("yyyy/MM/dd ", Locale.KOREA).format(currentTime)
+                                currentTime = format.parse(date_text)
+                                //여기서 전체 리스트를 day30으로 넣어야함 날짜지난건제외
+                                for (i in singleton.allFoods) {
+                                    Log.d("clock","clock allFoods")
+                                    val firstdate = format.parse(i.date)
+                                    val calDate = currentTime.time - firstdate.time
+                                    var calDateday = calDate / (24 * 60 * 60 * 1000)
+                                    calDateday = Math.abs(calDateday)
+                                    Log.d("tag", currentTime.toString() + "     \n" + calDateday + "days")
+                                    var index = calDateday.toInt()//
+                                    singleton.day30Lists[index].protein += i.pro!!
+                                    singleton.day30Lists[index].carbohydrate += i.car!!
+                                    singleton.day30Lists[index].kcal += i.kcal!!
+                                    singleton.day30Lists[index].fat += i.fat!!
+
+                                    if(index == 0)
+                                    {
+                                        singleton.todayKcalLists.add(TodayKcalList(i.time!!,i.name!!,i.kcal!!,i.fat!!,i.pro!!,i.car!!))
+                                    }
+
+                                }
+                            }catch (e : ParseException) {
+                                e.printStackTrace();
+                                Log.d("clock",e.toString()+"    clock error");
+                            }
 
 
-                            //여기서 전체 리스트를 day30으로 넣어야함 날짜지난건제외
+
+
 
                             //넣은 후에 singleton compute 함수로 clientdata에 세부 정보를 저장
 

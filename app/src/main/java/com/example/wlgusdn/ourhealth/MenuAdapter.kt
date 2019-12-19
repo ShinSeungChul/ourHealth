@@ -12,6 +12,7 @@ class MenuAdapter(Data : ArrayList<MenuList>) : BaseAdapter() {
     private var menulistdatacount = 0
     internal var inflater : LayoutInflater? = null
 
+    var temp = 0
     init {
         menulistdata = Data
         menulistdatacount = Data.size
@@ -46,6 +47,11 @@ class MenuAdapter(Data : ArrayList<MenuList>) : BaseAdapter() {
         val recommend_txt = convertView.findViewById<TextView>(R.id.recommend)
 
         name_txt.setText(menulistdata[position].foodname.toString())
+        for(item in menulistdata)
+        {
+
+           item.kcal
+        }
         recommend_txt.setText(menulistdata[position].recommend.toString())
 
 

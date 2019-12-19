@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity()
     var Foodsearch : Button?=null
     var photoPath : String?=null;
     val singleton : HealthData_Singleton = HealthData_Singleton.getInstance()
+    var todaydata : ArrayList<TodayKcalList> = ArrayList()
     var s3 : AmazonS3Client?= null
     var transferUtility : TransferUtility?=null
     var list : ArrayList<DayInput>?= ArrayList<DayInput>()
@@ -78,7 +79,7 @@ class MainActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        todaydata = singleton.todayKcalLists
 
        val CreatemutateCallback  = object : GraphQLCall.Callback<CreateDateMutation.Data>() {
 
@@ -135,11 +136,13 @@ class MainActivity : AppCompatActivity()
         setProgressText()
         val chart = findViewById<BarChart>(R.id.brchart)
         val entries = ArrayList<BarEntry>()
-        for(x in 0..24)
+        for(x in todaydata)
         {
-            val randomValues =  Random.nextInt(0, 800)
-            if(x== 9 || x== 13 || x==18 || x== 23)
-                entries.add(BarEntry(x.toFloat(), randomValues.toFloat()))
+
+
+            entries.add(BarEntry(x.time!!.toFloat(),x.kcal!!.toFloat()))
+
+
 
 
         }
