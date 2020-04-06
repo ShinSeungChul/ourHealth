@@ -36,3 +36,16 @@
 - - - 
 
 ## UI
+
+### Google의 OCR를 사용하여 사진 내의 한글 Text를 처리
+#### AWS의 Rekognition을 사용하려 했지만 한글 지원이 되지 않아 찾아보던 중 Google의 OCR을 선택
+
+![Industry_Project_Menu](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_Menu.PNG)
+
+- - -
+
+### AWS의 Rekognition으로 전처리를 하고 학습을 시킨 Sagemaker 모델로 후처리
+#### Sagemaker만을 사용하려 했지만 학습량과 기대치에서 많은 차이가 보임.
+#### Educate으로 받은 $100만으로는 학습량이 무리가 있어 전/후 처리를 각각 담당하게 개발
+
+![Industry_Project_Photo](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_Photo.PNG)
