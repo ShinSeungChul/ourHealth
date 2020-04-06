@@ -25,7 +25,34 @@
 
 ## 프레임 워크
 
+### 전체
 ![Industry_Project_FrameWork](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_FrameWork.PNG)
+
+### App에서 S3 연동 및 파일 저장
+
+* Client가 칼로리/단백질 등 영양소를 알고 싶은 Image File을 S3에 업로드
+![Industry_Project_AppToS3](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToS3.PNG)
+
+
+### SageMaker에서 S3에 접근하여 이미지 파일을 기반으로 학습 및 S3에 업로드된 사진을 분석
+
+* 이미 학습된 SageMaker 모델이 Client가 업로드한 이미지 파일에 접근하여 분석
+![Industry_Project_SageMakerToS3](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_SageMakerToS3.PNG)
+
+
+### Client가 등록한 사진에 대한 결과값 도출
+
+* Client가 S3에 파일을 업로드
+* Client가 Lambda를 통해 HTTP 통신
+* Lambda에서 S3에 파일을 Rekognition을 통해 전처리
+  * 이때 저장되어있는 결과값 ex) Sushi, Hamburger 등의 결과가 나오면 그대로 결과값 도출하여 속도 개선
+  * 만약 음식물로 결과값을 도출해내지 못하면 SageMaker를 통해 결과값 도출
+* 전처리를 통해 속도를 개선하였지만, 학습량이 많지 않아 좋지 않은 정확도를 가진 모델
+  * 해결방법 : 음식이름이 잘못 도출되면 User에게 입력을 받아 정확한 결과값을 저장해놓은 뒤, 일정량의 파일들이 S3에 축적되면 모델을 재학습
+![Industry_Project_AppToSagemaker](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToSagemaker.PNG)
+
+
+### 
 
 - - -
 
