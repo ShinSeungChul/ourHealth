@@ -30,13 +30,13 @@
 
 ### App에서 S3 연동 및 파일 저장
 
-* Client가 칼로리/단백질 등 영양소를 알고 싶은 Image File을 S3에 업로드
+* Client가 칼로리/단백질 등 영양소를 알고 싶은 Image File을 S3에 업로드  
 ![Industry_Project_AppToS3](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToS3.PNG)
 
 
 ### SageMaker에서 S3에 접근하여 이미지 파일을 기반으로 학습 및 S3에 업로드된 사진을 분석
 
-* 이미 학습된 SageMaker 모델이 Client가 업로드한 이미지 파일에 접근하여 분석
+* 이미 학습된 SageMaker 모델이 Client가 업로드한 이미지 파일에 접근하여 분석  
 ![Industry_Project_SageMakerToS3](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_SageMakerToS3.PNG)
 
 
