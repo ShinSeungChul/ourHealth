@@ -28,17 +28,37 @@
 ### 전체
 ![Industry_Project_FrameWork](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_FrameWork.PNG)
 
+- - -
+
+### Client의 회원가입 및 보안과 자격증명을 위함
+
+ * Amplify를 사용하여 App과 AWS의 통신의 편의성을 높힘
+
+![Industry_Project_AppToOCR](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToOCR.PNG)
+
+- - -
+
+### App에서 DB에 GraphQL 방식으로 직접 접근
+
+* Client가 직접 DB에 접근
+
+![Industry_Project_AppToDB](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToDB.PNG)
+
+- - -
+
 ### App에서 S3 연동 및 파일 저장
 
 * Client가 칼로리/단백질 등 영양소를 알고 싶은 Image File을 S3에 업로드  
 ![Industry_Project_AppToS3](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToS3.PNG)
 
+- - -
 
 ### SageMaker에서 S3에 접근하여 이미지 파일을 기반으로 학습 및 S3에 업로드된 사진을 분석
 
 * 이미 학습된 SageMaker 모델이 Client가 업로드한 이미지 파일에 접근하여 분석  
 ![Industry_Project_SageMakerToS3](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_SageMakerToS3.PNG)
 
+- - -
 
 ### Client가 등록한 사진에 대한 결과값 도출
 
@@ -52,11 +72,28 @@
 ![Industry_Project_AppToSagemaker](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToSagemaker.PNG)
 
 
-### 
+- - -
+
+
+### Client의 칼로리 소모량을 SamSung Health SDK를 사용하여 추출
+
+* 하루에 권장칼로리량, 소모한 칼로리를 계산하여 도출된 값을 음식 추천 알고리즘에 포함
+
+![Industry_Project_AppToSamsungHealth](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToSamsungHealth.PNG)
+
+- - -
+
+### Client의 갤러리 / 카메라에 접근하여 메뉴판 사진의 메뉴들의 이름 도출
+
+* Client의 섭취한 단백질, 칼로리, 지방 등의 영양소를 계산하여 가장 적합한 음식을 추천
+* 기존의 AWS Rekognition을 사용하려했지만 한글 지원 X
+ * 조사 후에 Google OCR을 사용
 
 - - -
 
 ## 실행 영상
+
+### 클릭하시면 유투브로 영상 시청이 가능합니다.
 
 [![Video Label](http://img.youtube.com/vi/GxYhWtoAvMI/0.jpg)](https://youtu.be/GxYhWtoAvMI?t=0s)
 
@@ -64,8 +101,8 @@
 
 ## UI
 
-### Google의 OCR를 사용하여 사진 내의 한글 Text를 처리
-#### AWS의 Rekognition을 사용하려 했지만 한글 지원이 되지 않아 찾아보던 중 Google의 OCR을 선택
+* Google의 OCR를 사용하여 사진 내의 한글 Text를 처리
+* AWS의 Rekognition을 사용하려 했지만 한글 지원이 되지 않아 찾아보던 중 Google의 OCR을 선택
 
 ![Industry_Project_Menu](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_Menu.PNG)
 
