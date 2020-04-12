@@ -34,7 +34,7 @@
 
  * Amplify를 사용하여 App과 AWS의 통신의 편의성을 높힘
 
-![Industry_Project_AppToOCR](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToOCR.PNG)
+![Industry_Project_AppToCognito](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToCognito.PNG)
 
 - - -
 
@@ -42,7 +42,7 @@
 
 * Client가 직접 DB에 접근
 
-![Industry_Project_AppToDB](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToDB.PNG)
+![Industry_Project_AppToDynamoDB](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToDB.PNG)
 
 - - -
 
@@ -88,6 +88,9 @@
 * Client의 섭취한 단백질, 칼로리, 지방 등의 영양소를 계산하여 가장 적합한 음식을 추천
 * 기존의 AWS Rekognition을 사용하려했지만 한글 지원 X
  * 조사 후에 Google OCR을 사용
+
+
+![Industry_Project_AppToOCR(https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToOCR.PNG)
 
 - - -
 
