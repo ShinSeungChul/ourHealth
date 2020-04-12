@@ -42,7 +42,7 @@
 
 * Client가 직접 DB에 접근
 
-![Industry_Project_AppToDynamoDB](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToDB.PNG)
+![Industry_Project_AppToDynamoDB](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToDynamoDB.PNG)
 
 - - -
 
@@ -90,7 +90,7 @@
  * 조사 후에 Google OCR을 사용
 
 
-![Industry_Project_AppToOCR(https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToOCR.PNG)
+![Industry_Project_AppToOCR](https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_AppToOCR.PNG)
 
 - - -
 
