@@ -4,6 +4,27 @@
 
 ## K대학교 산학프로젝트 수업
 
+<table>
+   <tr>
+     <th align="center">
+       <img width="200" alt="1" src="https://user-images.githubusercontent.com/11826495/79061403-f42c3f80-7cca-11ea-901c-ccd0b3c338eb.gif"/>
+       <br><br>[Eaten Food]
+     </th>
+     <th align="center">
+       <img width="200" alt="1" src="https://user-images.githubusercontent.com/11826495/79061528-15416000-7ccc-11ea-8e20-e0e40e148bbc.gif"/>
+       <br><br>[Take Picture] 
+    </th>
+     <th align="center">
+      <img width="200" alt="1" src="https://user-images.githubusercontent.com/11826495/79061554-533e8400-7ccc-11ea-989b-82dc1a28d039.gif"/>
+       <br><br>[InterpretPicture]
+    </th>
+     <th align="center">
+      <img width="200" alt="1" src="https://user-images.githubusercontent.com/11826495/79061636-29d22800-7ccd-11ea-9f1c-7fb77def4825.gif"/>
+       <br><br>[Parse MenuText]
+    </th>
+  </tr>
+</table>
+
 - - -
 
 ## 프로젝트 목표
