@@ -19,7 +19,7 @@
        <br><br>[InterpretPicture]
     </th>
      <th align="center">
-      <img width="200" alt="1" src="https://user-images.githubusercontent.com/11826495/79061636-29d22800-7ccd-11ea-9f1c-7fb77def4825.gif"/>
+      <img width="200" alt="1" src="https://user-images.githubusercontent.com/11826495/79061698-b2e95f00-7ccd-11ea-8b24-b0b4d281bf4c.gif"/>
        <br><br>[Parse MenuText]
     </th>
   </tr>
