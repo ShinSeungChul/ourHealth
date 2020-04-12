@@ -2,7 +2,7 @@
 
 - - -
 
-## 한국항공대학교 GS 네오텍과의 산학프로젝트
+## K대학교 산학프로젝트 수업
 
 - - -
 
@@ -18,7 +18,7 @@
 ## 사용 기술
 
 * AWS Amplify, S3, DynamoDB, Cognito, SageMaker, Lambda, G/W, 
-* SamSung Health
+* SamSung Health, OCR
 * Android
 
 - - -
