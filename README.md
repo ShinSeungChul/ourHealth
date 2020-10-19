@@ -1,8 +1,6 @@
 #  OurHealth
 <img src="https://github.com/kor-Randy/OurHealth_Industry/blob/master/Img/Industry_Project_Icon.PNG" width="250" height="250" />
 
-## 자세한 프로젝트 내용 : https://wlgusdn700.tistory.com/16
-
 - - -
 
 ## 프로젝트 목표
